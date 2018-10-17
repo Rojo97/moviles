@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Hola Usuario</string>
+    <string name="boton_hola">Saludame</string>
+    <string name="nombre">Hola usuario</string>
+    <string name="txtnombre">Escribe tu nombre:</string>
+</resources>
