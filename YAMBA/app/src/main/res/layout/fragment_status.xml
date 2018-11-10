@@ -38,6 +38,14 @@
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/black" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:minHeight="20dip"
+        android:maxHeight="20dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.ProgressBar.Horizontal"/>
+
     <Button
         android:id="@+id/buttonTweet"
         android:layout_width="fill_parent"

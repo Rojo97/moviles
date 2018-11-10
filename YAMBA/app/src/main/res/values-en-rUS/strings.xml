@@ -3,4 +3,6 @@
     <string name="title_status">Status update</string>
     <string name="button_tweet">Tweet</string>
     <string name="hint_status">Please, enter your 280-character status</string>
+    <string name="tweet_success">Tweet sent successfully</string>
+    <string name="tweet_fail">Error sending the tweet</string>
 </resources>

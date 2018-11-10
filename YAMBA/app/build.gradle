@@ -27,4 +27,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/twitter4j-4.0.7/lib/twitter4j-core-4.0.7.jar')
+    implementation 'com.android.support:design:27.1.1'
 }
