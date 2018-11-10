@@ -74,12 +74,12 @@ public class StatusFragment extends Fragment implements View.OnClickListener, Te
     public void afterTextChanged(Editable statusText) {
         int count = statusText.length();
         textCount.setText(count + totalChar);
-        if (count > 265){
-            textCount.setTextColor(Color.YELLOW);
+        if (count < 240 ){
+            textCount.setTextColor(Color.GREEN);
         }else if (count > 280){
             textCount.setTextColor(Color.RED);
         } else {
-            textCount.setTextColor(Color.GREEN);
+            textCount.setTextColor(Color.YELLOW);
         }
     }
 
