@@ -5,4 +5,11 @@
     <string name="hint_status">Por favor, introduce tu estado en 280 caracteres</string>
     <string name="tweet_success">Tweet enviado correctamente</string>
     <string name="tweet_fail">Fallo en el envío del tweet</string>
+    <string name="titleAccessToken">Access Token</string>
+    <string name="summaryAccessToken">Por favor, introduce tu Access token</string>
+    <string name="titleAccessTokenSecret">Access Token Secret</string>
+    <string name="summaryAccessTokenSecret">Por favor, introduce tu Access Token Secret</string>
+    <string name="action_settings">Opciones</string>
+    <string name="tweet">Tweet</string>
+    <string name="purge">Limpiar</string>
 </resources>
