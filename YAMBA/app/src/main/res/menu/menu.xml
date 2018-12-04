@@ -16,4 +16,14 @@
         android:id="@+id/action_purge"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/purge" />
+
+    <item
+        android:id="@+id/itemServiceStart"
+        android:title="@string/titleServiceStart"
+        android:icon="@android:drawable/ic_media_play" />
+
+    <item
+        android:id="@+id/itemServiceStop"
+        android:title="@string/titleServiceStop"
+        android:icon="@android:drawable/ic_media_pause" />
 </menu>
