@@ -1,8 +1,10 @@
 package com.example.rojo.yambaismaelvictor;
 
 import android.app.IntentService;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -24,10 +26,15 @@ public class RefreshService extends IntentService {
         super(TAG);
     }
 
+    DbHelper dbHelper;
+    SQLiteDatabase db;
+
     @Override
     public void onCreate() { //En creación
         super.onCreate();
         Log.d(TAG, "onCreated");
+
+        dbHelper = new DbHelper(this);
     }
 
     @Override
@@ -51,11 +58,24 @@ public class RefreshService extends IntentService {
                 Twitter twitter = factory.getInstance();
                 try {
                     List<Status> timeline = twitter.getHomeTimeline();
+                    // Iteramos sobre todos los componentes de timeline
+                    db = dbHelper.getWritableDatabase();
+                    ContentValues values = new ContentValues();
                 // Imprimimos las actualizaciones en el log
                     for (Status status : timeline) {
                         Log.d(TAG, String.format("%s: %s", status.getUser().getName(),
                                 status.getText()));
+                        // Insertar en la base de datos
+                        values.clear();
+                        values.put(StatusContract.Column.ID, status.getId());
+                        values.put(StatusContract.Column.USER, status.getUser().getName());
+                        values.put(StatusContract.Column.MESSAGE, status.getText());
+                        values.put(StatusContract.Column.CREATED_AT,
+                                status.getCreatedAt().getTime());
+                        db.insertWithOnConflict(StatusContract.TABLE, null, values,
+                                SQLiteDatabase.CONFLICT_IGNORE);
                     }
+                    db.close();
                 }
                 catch (TwitterException e) {
                     Log.e(TAG, "Failed to fetch the timeline", e);
