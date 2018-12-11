@@ -26,6 +26,10 @@
             android:name=".RefreshService"
             android:enabled="true"
             android:exported="true"></service>
+        <provider
+            android:name="com.example.rojo.yambaismaelvictor.StatusProvider"
+            android:authorities="com.example.rojo.yambaismaelvictor.StatusProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
