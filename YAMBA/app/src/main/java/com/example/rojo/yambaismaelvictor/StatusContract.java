@@ -1,3 +1,5 @@
+/*Victor Rojo Alvarez
+ * Ismael Perez Martin*/
 package com.example.rojo.yambaismaelvictor;
 
 import android.net.Uri;
