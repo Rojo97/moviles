@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">My shopping list</string>
+    <string name="title_status">Status update</string>
+    <string name="button_tweet">Tweet</string>
+    <string name="hint_status">Please, enter your 280-character status</string>
+    <string name="tweet_success">Tweet sent successfully</string>
+    <string name="tweet_fail">Error sending the tweet</string>
+    <string name="titleAccessToken">Access Token</string>
+    <string name="summaryAccessToken">Please, enter your Access Token</string>
+    <string name="titleAccessTokenSecret">Access Token Secret</string>
+    <string name="summaryAccessTokenSecret">Please, enter your Access Token Secret</string>
+    <string name="action_settings">Options</string>
+    <string name="tweet">Tweet</string>
+    <string name="purge">Clean</string>
+    <string name="titleServiceStart">Start service</string>
+    <string name="titleServiceStop">Stop service</string>
+</resources>
