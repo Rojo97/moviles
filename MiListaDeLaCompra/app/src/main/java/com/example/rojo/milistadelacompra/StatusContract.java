@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class StatusContract {
-    public static final String DB_NAME = "timeline.db";
+    public static final String DB_NAME = "MyLists.db";
     public static final int DB_VERSION = 1;
     public static final String TABLE = "status";
     public static final String DEFAULT_SORT = Column.CREATED_AT + " DESC";

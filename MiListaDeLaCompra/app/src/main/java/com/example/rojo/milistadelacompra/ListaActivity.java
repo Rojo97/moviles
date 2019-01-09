@@ -5,7 +5,7 @@ package com.example.rojo.milistadelacompra;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class StatusActivity extends AppCompatActivity {
+public class ListaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -13,7 +13,7 @@ public class StatusActivity extends AppCompatActivity {
         // Comprobar si la actividad ya ha sido creada con anterioridad
         if (savedInstanceState == null) {
         // Crear un fragment
-            StatusFragment fragment = new StatusFragment();
+            ListaFragment fragment = new ListaFragment();
             getFragmentManager()
                     .beginTransaction()
                     .add(android.R.id.content, fragment, fragment.getClass().getSimpleName())

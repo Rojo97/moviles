@@ -2,6 +2,7 @@
  * Ismael Perez Martin*/
 package com.example.rojo.milistadelacompra;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_tweet:
-                startActivity(new Intent(this, StatusActivity.class));
+                startActivity(new Intent(this, ListaActivity.class));
                 return true;
             case R.id.itemServiceStart:
                 startService(new Intent(this, RefreshService.class));
