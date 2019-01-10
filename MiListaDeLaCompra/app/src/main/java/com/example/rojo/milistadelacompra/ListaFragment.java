@@ -14,13 +14,13 @@ import android.widget.TextView;
 public class ListaFragment extends Fragment{
 
     private static final String TAG = ListaFragment.class.getSimpleName();
-    private TextView nombre;
-    int i;
+    private TextView nombreTextview;
+    private String listaNombre;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_lista, container, false);
-        nombre = view.findViewById(R.id.nombre_lista);
+        nombreTextview = view.findViewById(R.id.nombre_lista);
         return view;
     }
 
@@ -32,8 +32,8 @@ public class ListaFragment extends Fragment{
         Bundle bundle = getArguments();
         if(bundle != null)
         {
-            i = bundle.getInt("PULSADO");
-            nombre.setText(""+i);
+            listaNombre = bundle.getString("LISTA_NOMBRE");
+            nombreTextview.setText(listaNombre);
 
         }
     }

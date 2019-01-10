@@ -2,4 +2,7 @@
     <string name="app_name">My shopping list</string>
     <string name="listas_text">My shopping lists</string>
     <string name="add_product">Add product</string>
+    <string name="data_charged">Data loaded successfully</string>
+    <string name="db_error">Error trying to connect to the database</string>
+    <string name="loading_data">Loading data</string>
 </resources>

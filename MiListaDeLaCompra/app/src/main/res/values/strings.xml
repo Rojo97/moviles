@@ -2,4 +2,7 @@
     <string name="app_name">Mi lista de la compra</string>
     <string name="listas_text">Mis listas de la compra</string>
     <string name="add_product">Añadir producto</string>
+    <string name="data_charged">Datos cargados con exito</string>
+    <string name="db_error">Error al conectar con la base de datos</string>
+    <string name="loading_data">Cargando datos</string>
 </resources>

@@ -23,6 +23,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener{
@@ -42,11 +43,13 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         int botones = 5;
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        LinearLayout layout = view.findViewById(R.id.my_lists_buttons);
+        ConnectMySql connectMySql = new ConnectMySql(view, this.getActivity(), this);
+        connectMySql.execute("");
+        //LinearLayout layout = view.findViewById(R.id.my_lists_buttons);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        for (int i = 0; i < botones; i++){
+        //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                //LinearLayout.LayoutParams.WRAP_CONTENT);
+        /*for (int i = 0; i < botones; i++){
             Button boton = new Button(this.getActivity());
             boton.setLayoutParams(layoutParams);
             boton.setText("Aqui va la lista " + i);
@@ -54,7 +57,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             boton.setOnClickListener(this);
             layout.addView(boton);
 
-        }
+        }*/
         return view;
 
     }
@@ -62,14 +65,28 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         int i = view.getId();
-        ConnectMySql connectMySql = new ConnectMySql(this.getView(), this.getActivity());
-        connectMySql.execute("");
-        Log.d(TAG,"OnClicked " + i);
+        Log.d(TAG,"OnClicked " + view.getTag());
         Intent intentLista = new Intent(view.getContext(), ListaActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("PULSADO", i);
+        bundle.putString("LISTA_NOMBRE", view.getTag().toString());
         intentLista.putExtras(bundle);
         startActivity(intentLista);
+    }
+
+    public void onTaskFinished(ArrayList<String> listas){
+        LinearLayout layout = this.getView().findViewById(R.id.my_lists_buttons);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        for (int i = 0; i < listas.size(); i++) {
+            Button boton = new Button(this.getActivity());
+            boton.setLayoutParams(layoutParams);
+            boton.setText(listas.get(i));
+            boton.setTag(listas.get(i));
+            boton.setOnClickListener(this);
+            layout.addView(boton);
+        }
     }
 
     private class ConnectMySql extends AsyncTask<String, Void, String> {
@@ -77,15 +94,18 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         Context contexto;
         View view;
-        public ConnectMySql(View view, Context contexto){
+        MainFragment main;
+        ArrayList<String> listas;
+        public ConnectMySql(View view, Context contexto, MainFragment main){
             this.view = view;
             this.contexto = contexto;
+            this.main = main;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(contexto, "Please wait...", Toast.LENGTH_SHORT)
+            Toast.makeText(contexto, getResources().getString(R.string.loading_data), Toast.LENGTH_SHORT)
                     .show();
 
         }
@@ -95,22 +115,24 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
-                System.out.println("Databaseection success");
+                System.out.println("Database conection success");
 
-                String result = "Database Connection Successful\n";
+
                 Statement st = con.createStatement();
-                st.execute("INSERT INTO ListaCompra VALUES ('listaDeLaApp', 'victor');");
-                //ResultSet rs = st.executeQuery("select * from Usuario");
+                ResultSet rs = st.executeQuery("select * from ListaCompra where estado = '1';");
+                ResultSetMetaData rsmd = rs.getMetaData();
+                String result = getResources().getString(R.string.data_charged);
+                listas = new ArrayList<String>();
 
-                //ResultSetMetaData rsmd = rs.getMetaData();
+                while (rs.next()) {
+                    listas.add(rs.getString(1));
 
-                //while (rs.next()) {
-                //    result += rs.getString(1) + "\n";
-                //}
-                //res = result;
+                }
+                res = result;
             } catch (Exception e) {
                 e.printStackTrace();
-                res = e.toString();
+                Log.e(TAG, e.toString());
+                res = getResources().getString(R.string.db_error);
             }
             return res;
         }
@@ -118,7 +140,11 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         @Override
         protected void onPostExecute(String result) {
             Log.e(TAG, result);
+            Toast.makeText(contexto, result, Toast.LENGTH_SHORT)
+                    .show();
+            main.onTaskFinished(listas);
         }
+
     }
 
 }
