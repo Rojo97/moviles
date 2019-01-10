@@ -3,12 +3,8 @@
 package com.example.rojo.milistadelacompra;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = MainFragment.class.getSimpleName();
     private SimpleCursorAdapter mAdapter;
@@ -29,7 +24,7 @@ public class MainFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         int botones = 5;
-        View view = inflater.inflate(R.layout.list_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         LinearLayout layout = view.findViewById(R.id.my_lists_buttons);
 
@@ -38,11 +33,24 @@ public class MainFragment extends Fragment{
         for (int i = 0; i < botones; i++){
             Button boton = new Button(this.getActivity());
             boton.setLayoutParams(layoutParams);
-            boton.setText("Soy el boton" + i);
+            boton.setText("Aqui va la lista " + i);
             boton.setId(i);
+            boton.setOnClickListener(this);
             layout.addView(boton);
+
         }
         return view;
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        int i = view.getId();
+        Log.d(TAG,"OnClicked " + i);
+        Intent intentLista = new Intent(view.getContext(), ListaActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("PULSADO", i);
+        intentLista.putExtras(bundle);
+        startActivity(intentLista);
     }
 }

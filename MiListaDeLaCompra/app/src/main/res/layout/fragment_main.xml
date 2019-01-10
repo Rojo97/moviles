@@ -4,7 +4,15 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="10pt"
+    android:orientation="vertical"
     tools:context="com.example.rojo.milistadelacompra.MainActivity">
+
+    <TextView
+        android:id="@+id/text_lists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/listas_text"
+        tools:textSize="30sp" />
 
     <ScrollView
         android:layout_width="match_parent"

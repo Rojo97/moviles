@@ -6,24 +6,24 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never"
-        android:title="@string/action_settings" />
+        android:title="hola" />
     <item
         android:id="@+id/action_tweet"
         android:icon="@android:drawable/ic_menu_edit"
         app:showAsAction="always|withText"
-        android:title="@string/tweet" />
+        android:title="hola" />
     <item
         android:id="@+id/action_purge"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/purge" />
+        android:title="hola" />
 
     <item
         android:id="@+id/itemServiceStart"
-        android:title="@string/titleServiceStart"
+        android:title="hola"
         android:icon="@android:drawable/ic_media_play" />
 
     <item
         android:id="@+id/itemServiceStop"
-        android:title="@string/titleServiceStop"
+        android:title="hola"
         android:icon="@android:drawable/ic_media_pause" />
 </menu>
