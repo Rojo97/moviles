@@ -14,4 +14,7 @@
     <string name="password">Contraseña</string>
     <string name="user_desc">Tu nombre de usuario</string>
     <string name="password_desc">Tu contraseña</string>
+    <string name="add_element">Añadir elemento</string>
+    <string name="delete_element">Añadir elemento</string>
+    <string name="delete_list">Eliminar lista</string>
 </resources>

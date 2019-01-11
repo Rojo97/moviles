@@ -14,4 +14,7 @@
     <string name="password">Password</string>
     <string name="user_desc">Your username</string>
     <string name="password_desc">Your password</string>
+    <string name="add_element">Add item</string>
+    <string name="delete_element">Delete item</string>
+    <string name="delete_list">Delete list</string>
 </resources>
