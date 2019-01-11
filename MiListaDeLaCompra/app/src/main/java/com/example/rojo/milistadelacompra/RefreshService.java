@@ -44,7 +44,7 @@ public class RefreshService extends IntentService {
         this.runFlag = true;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String user = "isma";
+        String user = prefs.getString("user", "");
 
         while (runFlag) {
             Log.d(TAG, "Updater running Db");
