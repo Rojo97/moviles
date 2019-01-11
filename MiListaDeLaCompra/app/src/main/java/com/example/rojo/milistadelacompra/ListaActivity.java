@@ -4,6 +4,7 @@ package com.example.rojo.milistadelacompra;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 
 public class ListaActivity extends AppCompatActivity {
     @Override
@@ -21,5 +22,11 @@ public class ListaActivity extends AppCompatActivity {
                     .commit();
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lista, menu);
+        return true;
     }
 }

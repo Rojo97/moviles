@@ -17,12 +17,16 @@
         android:textColor="@android:color/white"
         android:background="#d444" />
 
-    <Button
-        android:id="@+id/addProductButton"
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_product"
-        android:textSize="20sp"
-        tools:text="@string/add_product" />
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:id="@+id/my_products" />
+    </ScrollView>
 
 </LinearLayout>

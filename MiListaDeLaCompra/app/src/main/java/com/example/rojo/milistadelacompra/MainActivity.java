@@ -2,7 +2,6 @@
  * Ismael Perez Martin*/
 package com.example.rojo.milistadelacompra;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_principal, menu);
         return true;
     }
 
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
-            case R.id.action_tweet:
+            case R.id.add_list:
                 startActivity(new Intent(this, ListaActivity.class));
                 return true;
             case R.id.itemServiceStart:

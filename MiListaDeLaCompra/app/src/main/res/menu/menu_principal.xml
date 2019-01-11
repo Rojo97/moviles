@@ -3,27 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/add_list"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="always|withText"
+        android:title="@string/add_list" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never"
-        android:title="hola" />
+        android:title="@string/settings_text" />
     <item
-        android:id="@+id/action_tweet"
-        android:icon="@android:drawable/ic_menu_edit"
-        app:showAsAction="always|withText"
-        android:title="hola" />
-    <item
-        android:id="@+id/action_purge"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:title="hola" />
+        android:id="@+id/register"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/register" />
 
     <item
         android:id="@+id/itemServiceStart"
-        android:title="hola"
+        android:title="@string/start_service"
         android:icon="@android:drawable/ic_media_play" />
 
     <item
         android:id="@+id/itemServiceStop"
-        android:title="hola"
+        android:title="@string/stop_service"
         android:icon="@android:drawable/ic_media_pause" />
 </menu>
