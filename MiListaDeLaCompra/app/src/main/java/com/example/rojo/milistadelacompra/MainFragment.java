@@ -29,9 +29,6 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = MainFragment.class.getSimpleName();
-    private SimpleCursorAdapter mAdapter;
-    private static final String[] FROM = {StatusContract.Column.USER, StatusContract.Column.MESSAGE, StatusContract.Column.CREATED_AT};
-    private static final int LOADER_ID = 42;
     private static final String url = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
     private static final String user = "root";
     private static final String pass = "";
