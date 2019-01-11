@@ -6,6 +6,14 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class StatusContract {
+    public static final String REMOTEURL = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
+    public static final String REMOTEUSER = "root";
+    public static final String REMOTEPASS = "";
+
+    public static final String QUERYPARTICIPACION = "SELECT * FROM Participacion P WHERE P.nickUsuario = '";
+    public static final String QUERYPARTICIPACION = "SELECT * FROM Participacion P WHERE P.nickUsuario = '";
+
+
     public static final String DB_NAME = "MyLists.db";
     public static final int DB_VERSION = 1;
     public static final String TABLEPARTICIPACION = "Participacion";

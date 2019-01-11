@@ -7,6 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 public class DbHelper extends SQLiteOpenHelper {
     private static final String TAG = DbHelper.class.getSimpleName();
 
@@ -56,6 +64,7 @@ public class DbHelper extends SQLiteOpenHelper {
     // Llamado siempre que tengamos una nueva version
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
 // Aqui irían las sentencias del tipo ALTER TABLE, de momento lo hacemosmas sencillo...
 // Borramos la vieja base de datos
         db.execSQL("drop table if exists " + StatusContract.TABLEPARTICIPACION);
