@@ -20,45 +20,51 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("drop table if exists " + StatusContract.TABLEELEMENTO);
-        db.execSQL("drop table if exists " + StatusContract.TABLEPARTICIPACION);
-        db.execSQL("drop table if exists " + StatusContract.TABLELISTACOMPRA);
+        Log.d(TAG,  " Db CREAAAAAAAA");
 
-        //Consultas para crear las tablas de la bd que encesitamos de la bd remota
-        String sqlListaCompra = String.format("create table %s (%s text primary key, %s text, %s int)",
-                StatusContract.TABLELISTACOMPRA,
-                StatusContract.ColumnListaCompra.ID,
-                StatusContract.ColumnListaCompra.USER,
-                StatusContract.ColumnListaCompra.STATUS);
+        try{
+            db.execSQL("drop table if exists " + StatusContract.TABLEELEMENTO);
+            db.execSQL("drop table if exists " + StatusContract.TABLEPARTICIPACION);
+            db.execSQL("drop table if exists " + StatusContract.TABLELISTACOMPRA);
 
-        String sqlParticipacion = String.format("create table %s (%s int primary key, %s text, %s text, foreign key (%s) references %s (%s))",
-                StatusContract.TABLEPARTICIPACION,
-                StatusContract.ColumnParticipacion.ID,
-                StatusContract.ColumnParticipacion.USER,
-                StatusContract.ColumnParticipacion.LISTA,
-                StatusContract.ColumnParticipacion.LISTA,
-                StatusContract.TABLELISTACOMPRA,
-                StatusContract.ColumnListaCompra.ID);
+            //Consultas para crear las tablas de la bd que encesitamos de la bd remota
+            String sqlListaCompra = String.format("create table %s (%s text primary key, %s text, %s int)",
+                    StatusContract.TABLELISTACOMPRA,
+                    StatusContract.ColumnListaCompra.ID,
+                    StatusContract.ColumnListaCompra.USER,
+                    StatusContract.ColumnListaCompra.STATUS);
 
-        String sqlElemento = String.format("create table %s (%s text , %s int, %s float, %s text, %s int, foreign key (%s) references %s (%s), primary key (%s, %s))",
-                StatusContract.TABLEELEMENTO,
-                StatusContract.ColumnElemento.ID,
-                StatusContract.ColumnElemento.QUANTITY,
-                StatusContract.ColumnElemento.PRICE,
-                StatusContract.ColumnElemento.IDLISTA,
-                StatusContract.ColumnElemento.STATUS,
-                StatusContract.ColumnElemento.IDLISTA,
-                StatusContract.TABLELISTACOMPRA,
-                StatusContract.ColumnListaCompra.ID,
-                StatusContract.ColumnElemento.ID,
-                StatusContract.ColumnElemento.IDLISTA);
+            String sqlParticipacion = String.format("create table %s (%s int primary key, %s text, %s text, foreign key (%s) references %s (%s))",
+                    StatusContract.TABLEPARTICIPACION,
+                    StatusContract.ColumnParticipacion.ID,
+                    StatusContract.ColumnParticipacion.USER,
+                    StatusContract.ColumnParticipacion.LISTA,
+                    StatusContract.ColumnParticipacion.LISTA,
+                    StatusContract.TABLELISTACOMPRA,
+                    StatusContract.ColumnListaCompra.ID);
 
-        Log.d(TAG, "onCreate con SQL Db: " + sqlParticipacion);
-        Log.d(TAG, "onCreate con SQL Db: " + sqlListaCompra);
-        Log.d(TAG, "onCreate con SQL Db: " + sqlElemento);
-        db.execSQL(sqlListaCompra);
-        db.execSQL(sqlParticipacion);
-        db.execSQL(sqlElemento);
+            String sqlElemento = String.format("create table %s (%s text , %s int, %s float, %s text, %s int, foreign key (%s) references %s (%s), primary key (%s, %s))",
+                    StatusContract.TABLEELEMENTO,
+                    StatusContract.ColumnElemento.ID,
+                    StatusContract.ColumnElemento.QUANTITY,
+                    StatusContract.ColumnElemento.PRICE,
+                    StatusContract.ColumnElemento.IDLISTA,
+                    StatusContract.ColumnElemento.STATUS,
+                    StatusContract.ColumnElemento.IDLISTA,
+                    StatusContract.TABLELISTACOMPRA,
+                    StatusContract.ColumnListaCompra.ID,
+                    StatusContract.ColumnElemento.ID,
+                    StatusContract.ColumnElemento.IDLISTA);
+
+            Log.d(TAG, "onCreate con SQL Db: " + sqlParticipacion);
+            Log.d(TAG, "onCreate con SQL Db: " + sqlListaCompra);
+            Log.d(TAG, "onCreate con SQL Db: " + sqlElemento);
+            db.execSQL(sqlListaCompra);
+            db.execSQL(sqlParticipacion);
+            db.execSQL(sqlElemento);
+        }catch(Exception e){
+            Log.d(TAG, e.getMessage() + " Db");
+        }
     }
     // Llamado siempre que tengamos una nueva version
     @Override

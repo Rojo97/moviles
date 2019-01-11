@@ -49,26 +49,7 @@ public class RefreshService extends IntentService {
         while (runFlag) {
             Log.d(TAG, "Updater running Db");
             try {
-                // Iteramos sobre todos los componentes de timeline
-                db = dbHelper.getWritableDatabase();
-
-                try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    Connection con = DriverManager.getConnection(StatusContract.REMOTEURL, StatusContract.REMOTEUSER, StatusContract.REMOTEPASS);
-                    System.out.println("Database conection success");
-                    Log.d(TAG, "Database conection success Db");
-
-                    //Se actualiza la bd local
-                    updateDB(con, db, user);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, e.toString());
-                }
-
-                // Cerrar la base de datos
-                db.close();
-                Log.d(TAG, "Updater ran Db");
+                updateDB(user);
                 Thread.sleep(DELAY);
             } catch (InterruptedException e) {
                 runFlag = false;
@@ -85,7 +66,37 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "onDestroyed");
     }
 
-    private void updateDB(Connection con, SQLiteDatabase db, String user){
+    private void updateDB(String user){
+        // Iteramos sobre todos los componentes de timeline
+        db = dbHelper.getWritableDatabase();
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(StatusContract.REMOTEURL, StatusContract.REMOTEUSER, StatusContract.REMOTEPASS);
+            System.out.println("Database conection success");
+            Log.d(TAG, "Database conection success Db");
+
+            //Se actualiza la bd local
+            updateTables(con, db, user);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+
+        // Cerrar la base de datos
+        db.close();
+        Log.d(TAG, "Updater ran Db");
+    }
+
+    /*private void updateDB(Intent intent){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String user = prefs.getString("user", "");
+
+        updateDB(user);
+    }*/
+
+    private void updateTables(Connection con, SQLiteDatabase db, String user){
         try {
             Statement st = con.createStatement();
 
@@ -164,21 +175,24 @@ public class RefreshService extends IntentService {
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.LISTA,
                     idLista, StatusContract.ColumnParticipacion.USER, user));
 
-            int ID = rs.getInt("ID");
-            String nickUsuario = rs.getString("nickUsuario");
-            String nombreLista = rs.getString("nombreLista");
+            while(rs.next()){
+                int ID = rs.getInt("ID");
+                String nickUsuario = rs.getString("nickUsuario");
 
-            // Imprimimos las actualizaciones en el log
-            Log.d(TAG, String.format("%d, %s: %s", ID, nickUsuario, nombreLista));
-            // Insertar en la base de datos
+                // Imprimimos las actualizaciones en el log
+                Log.d(TAG, String.format("AAAA %d, %s: %s Db", ID, nickUsuario, idLista));
+                // Insertar en la base de datos
 
-            values.clear();
-            values.put(StatusContract.ColumnParticipacion.ID, ID);
-            values.put(StatusContract.ColumnParticipacion.USER, nickUsuario);
-            values.put(StatusContract.ColumnParticipacion.LISTA, nombreLista);
-            db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,
-                    SQLiteDatabase.CONFLICT_IGNORE);
+                values.clear();
+                values.put(StatusContract.ColumnParticipacion.ID, ID);
+                values.put(StatusContract.ColumnParticipacion.USER, nickUsuario);
+                values.put(StatusContract.ColumnParticipacion.LISTA, idLista);
+                db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,
+                        SQLiteDatabase.CONFLICT_IGNORE);
+            }
+
         } catch (SQLException e) {
+            Log.d(TAG, "Db " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -194,20 +208,24 @@ public class RefreshService extends IntentService {
 
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLEELEMENTO, StatusContract.ColumnElemento.IDLISTA, idLista));
 
-            String nombre = rs.getString("nombre");
-            int cantidad = rs.getInt("cantidad");
-            float precioUnidad = rs.getFloat("precioUnidad");
-            int estado = rs.getInt("estado");
+            while(rs.next()){
+                String nombre = rs.getString("nombre");
+                int cantidad = rs.getInt("cantidad");
+                float precioUnidad = rs.getFloat("precioUnidad");
+                int estado = rs.getInt("estado");
 
 
 
-            values.clear();
-            values.put(StatusContract.ColumnElemento.ID, nombre);
-            values.put(StatusContract.ColumnElemento.QUANTITY, cantidad);
-            values.put(StatusContract.ColumnElemento.PRICE, precioUnidad);
-            values.put(StatusContract.ColumnElemento.STATUS, estado);
-            db.insertWithOnConflict(StatusContract.TABLEELEMENTO, null, values,
-                    SQLiteDatabase.CONFLICT_IGNORE);
+                values.clear();
+                values.put(StatusContract.ColumnElemento.ID, nombre);
+                values.put(StatusContract.ColumnElemento.QUANTITY, cantidad);
+                values.put(StatusContract.ColumnElemento.PRICE, precioUnidad);
+                values.put(StatusContract.ColumnElemento.IDLISTA, idLista);
+                values.put(StatusContract.ColumnElemento.STATUS, estado);
+                db.insertWithOnConflict(StatusContract.TABLEELEMENTO, null, values,
+                        SQLiteDatabase.CONFLICT_IGNORE);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
