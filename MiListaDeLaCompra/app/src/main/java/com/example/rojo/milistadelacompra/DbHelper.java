@@ -8,13 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
-import java.util.ArrayList;
-
 public class DbHelper extends SQLiteOpenHelper {
     private static final String TAG = DbHelper.class.getSimpleName();
 
@@ -27,7 +20,17 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        db.execSQL("drop table if exists " + StatusContract.TABLEELEMENTO);
+        db.execSQL("drop table if exists " + StatusContract.TABLEPARTICIPACION);
+        db.execSQL("drop table if exists " + StatusContract.TABLELISTACOMPRA);
+
         //Consultas para crear las tablas de la bd que encesitamos de la bd remota
+        String sqlListaCompra = String.format("create table %s (%s text primary key, %s text, %s int)",
+                StatusContract.TABLELISTACOMPRA,
+                StatusContract.ColumnListaCompra.ID,
+                StatusContract.ColumnListaCompra.USER,
+                StatusContract.ColumnListaCompra.STATUS);
+
         String sqlParticipacion = String.format("create table %s (%s int primary key, %s text, %s text, foreign key (%s) references %s (%s))",
                 StatusContract.TABLEPARTICIPACION,
                 StatusContract.ColumnParticipacion.ID,
@@ -37,11 +40,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 StatusContract.TABLELISTACOMPRA,
                 StatusContract.ColumnListaCompra.ID);
 
-        String sqlListaCompra = String.format("create table %s (%s texto primary key, %s text, %s int)",
-                StatusContract.TABLELISTACOMPRA,
-                StatusContract.ColumnListaCompra.USER,
-                StatusContract.ColumnListaCompra.STATUS);
-
         String sqlElemento = String.format("create table %s (%s text , %s int, %s float, %s text, %s int, foreign key (%s) references %s (%s), primary key (%s, %s))",
                 StatusContract.TABLEELEMENTO,
                 StatusContract.ColumnElemento.ID,
@@ -49,16 +47,17 @@ public class DbHelper extends SQLiteOpenHelper {
                 StatusContract.ColumnElemento.PRICE,
                 StatusContract.ColumnElemento.IDLISTA,
                 StatusContract.ColumnElemento.STATUS,
-                StatusContract.ColumnParticipacion.LISTA,
+                StatusContract.ColumnElemento.IDLISTA,
                 StatusContract.TABLELISTACOMPRA,
                 StatusContract.ColumnListaCompra.ID,
+                StatusContract.ColumnElemento.ID,
                 StatusContract.ColumnElemento.IDLISTA);
 
-        Log.d(TAG, "onCreate con SQL: " + sqlParticipacion);
-        Log.d(TAG, "onCreate con SQL: " + sqlListaCompra);
-        Log.d(TAG, "onCreate con SQL: " + sqlElemento);
-        db.execSQL(sqlParticipacion);
+        Log.d(TAG, "onCreate con SQL Db: " + sqlParticipacion);
+        Log.d(TAG, "onCreate con SQL Db: " + sqlListaCompra);
+        Log.d(TAG, "onCreate con SQL Db: " + sqlElemento);
         db.execSQL(sqlListaCompra);
+        db.execSQL(sqlParticipacion);
         db.execSQL(sqlElemento);
     }
     // Llamado siempre que tengamos una nueva version
@@ -67,10 +66,12 @@ public class DbHelper extends SQLiteOpenHelper {
 
 // Aqui irían las sentencias del tipo ALTER TABLE, de momento lo hacemosmas sencillo...
 // Borramos la vieja base de datos
+        db.execSQL("drop table if exists " + StatusContract.TABLEELEMENTO);
         db.execSQL("drop table if exists " + StatusContract.TABLEPARTICIPACION);
+        db.execSQL("drop table if exists " + StatusContract.TABLELISTACOMPRA);
 // Creamos una base de datos nueva
         onCreate(db);
         Log.d(TAG,
-                "onUpgrade");
+                "onUpgrade Db");
     }
 }

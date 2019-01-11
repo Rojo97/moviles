@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -16,12 +15,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 public class RefreshService extends IntentService {
     static final String TAG = "RefreshService";
 
-    static final int DELAY = 30000; // medio minuto
+    static final int DELAY = 10000; // medio minuto
     private boolean runFlag = false;
 
     public RefreshService() {
@@ -46,48 +44,31 @@ public class RefreshService extends IntentService {
         this.runFlag = true;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String accesstoken = prefs.getString("accesstoken", "");
-        String accesstokensecret = prefs.getString("accesstokensecret", "");
+        String user = "isma";
+
         while (runFlag) {
-            Log.d(TAG, "Updater running");
+            Log.d(TAG, "Updater running Db");
             try {
                 // Iteramos sobre todos los componentes de timeline
                 db = dbHelper.getWritableDatabase();
-                ContentValues values = new ContentValues();
 
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection(StatusContract.REMOTEURL, StatusContract.REMOTEUSER, StatusContract.REMOTEPASS);
                     System.out.println("Database conection success");
+                    Log.d(TAG, "Database conection success Db");
 
-                    Statement st = con.createStatement();
-
-                    //Se actualiza cada tabla de la bd
-                    updateParticipaciones(st);
-
+                    //Se actualiza la bd local
+                    updateDB(con, db, user);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, e.toString());
                 }
 
-                for (Status status : timeline) {
-                    // Imprimimos las actualizaciones en el log
-                    Log.d(TAG, String.format("%s: %s", status.getUser().getName(),
-                            status.getText()));
-                    // Insertar en la base de datos
-                    values.clear();
-                    values.put(StatusContract.Column.ID, status.getId());
-                    values.put(StatusContract.Column.USER, status.getUser().getName());
-                    values.put(StatusContract.Column.MESSAGE, status.getText());
-                    values.put(StatusContract.Column.CREATED_AT,
-                            status.getCreatedAt().getTime());
-                    db.insertWithOnConflict(StatusContract.TABLE, null, values,
-                            SQLiteDatabase.CONFLICT_IGNORE);
-                }
                 // Cerrar la base de datos
                 db.close();
-                Log.d(TAG, "Updater ran");
+                Log.d(TAG, "Updater ran Db");
                 Thread.sleep(DELAY);
             } catch (InterruptedException e) {
                 runFlag = false;
@@ -104,9 +85,129 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "onDestroyed");
     }
 
-    private void updateParticipaciones(Statement st){
+    private void updateDB(Connection con, SQLiteDatabase db, String user){
         try {
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.USER, "hola"));
+            Statement st = con.createStatement();
+
+            Log.d(TAG,String.format("select * from %s where %s = '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.USER, user)+" Db");
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.USER, user));
+
+            db.execSQL("delete from " + StatusContract.TABLEPARTICIPACION);
+            db.execSQL("delete from " + StatusContract.TABLELISTACOMPRA);
+            db.execSQL("delete from " + StatusContract.TABLEELEMENTO);
+
+            // Iteramos sobre todos los componentes de timeline
+            ContentValues values = new ContentValues();
+
+            while(rs.next()){
+                int ID = rs.getInt("ID");
+                String nombreLista = rs.getString("nombreLista");
+
+                // Insertar en la base de datos
+                values.clear();
+                values.put(StatusContract.ColumnParticipacion.ID, ID);
+                values.put(StatusContract.ColumnParticipacion.USER, user);
+                values.put(StatusContract.ColumnParticipacion.LISTA, nombreLista);
+                db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,
+                        SQLiteDatabase.CONFLICT_IGNORE);
+
+                updateLista(con, db, nombreLista, user);
+            }
+        } catch (SQLException e) {
+            Log.d(TAG, "UPDATE Db: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void updateLista(Connection con, SQLiteDatabase db, String idLista, String user){
+        try {
+
+            Statement st = con.createStatement();
+
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", StatusContract.TABLELISTACOMPRA, StatusContract.ColumnListaCompra.ID, idLista) + " Db");
+            ContentValues values = new ContentValues();
+
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLELISTACOMPRA, StatusContract.ColumnListaCompra.ID, idLista));
+
+            //Se coge el primer elemento del ResultSet
+            rs.next();
+            String nickUsuario = rs.getString("nickUsuario");
+            int estado = rs.getInt("estado");
+
+            if(estado==1 || nickUsuario.equals(user)){
+
+                values.clear();
+                values.put(StatusContract.ColumnListaCompra.ID, idLista);
+                values.put(StatusContract.ColumnListaCompra.USER, nickUsuario);
+                values.put(StatusContract.ColumnListaCompra.STATUS, estado);
+                db.insertWithOnConflict(StatusContract.TABLELISTACOMPRA, null, values,
+                        SQLiteDatabase.CONFLICT_IGNORE);
+
+                updateParticipaciones(con, db, idLista, user);
+                updateElementos(con, db, idLista);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateParticipaciones(Connection con, SQLiteDatabase db, String idLista, String user){
+        try {
+
+            Statement st = con.createStatement();
+
+            Log.d(TAG, String.format("select * from %s where %s = '%s' and %s <> '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.LISTA,
+                    idLista, StatusContract.ColumnParticipacion.USER, user) + " Db");
+            ContentValues values = new ContentValues();
+
+            //Saca los participantes de la lista distintos a user
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.LISTA,
+                    idLista, StatusContract.ColumnParticipacion.USER, user));
+
+            int ID = rs.getInt("ID");
+            String nickUsuario = rs.getString("nickUsuario");
+            String nombreLista = rs.getString("nombreLista");
+
+            // Imprimimos las actualizaciones en el log
+            Log.d(TAG, String.format("%d, %s: %s", ID, nickUsuario, nombreLista));
+            // Insertar en la base de datos
+
+            values.clear();
+            values.put(StatusContract.ColumnParticipacion.ID, ID);
+            values.put(StatusContract.ColumnParticipacion.USER, nickUsuario);
+            values.put(StatusContract.ColumnParticipacion.LISTA, nombreLista);
+            db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,
+                    SQLiteDatabase.CONFLICT_IGNORE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateElementos(Connection con, SQLiteDatabase db, String idLista){
+        try {
+
+            Statement st = con.createStatement();
+
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", StatusContract.TABLEELEMENTO, StatusContract.ColumnElemento.IDLISTA, idLista) + " Db");
+
+            ContentValues values = new ContentValues();
+
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLEELEMENTO, StatusContract.ColumnElemento.IDLISTA, idLista));
+
+            String nombre = rs.getString("nombre");
+            int cantidad = rs.getInt("cantidad");
+            float precioUnidad = rs.getFloat("precioUnidad");
+            int estado = rs.getInt("estado");
+
+
+
+            values.clear();
+            values.put(StatusContract.ColumnElemento.ID, nombre);
+            values.put(StatusContract.ColumnElemento.QUANTITY, cantidad);
+            values.put(StatusContract.ColumnElemento.PRICE, precioUnidad);
+            values.put(StatusContract.ColumnElemento.STATUS, estado);
+            db.insertWithOnConflict(StatusContract.TABLEELEMENTO, null, values,
+                    SQLiteDatabase.CONFLICT_IGNORE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
