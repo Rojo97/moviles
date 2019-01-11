@@ -6,7 +6,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never"
-        android:title="xd" />
+        android:title="@string/add_list" />
     <item
         android:id="@+id/action_purge"
         android:icon="@android:drawable/ic_menu_delete"

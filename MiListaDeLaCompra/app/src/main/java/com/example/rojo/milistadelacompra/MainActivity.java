@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
-            case R.id.action_tweet:
+            case R.id.add_list:
                 startActivity(new Intent(this, ListaActivity.class));
                 return true;
             case R.id.itemServiceStart:

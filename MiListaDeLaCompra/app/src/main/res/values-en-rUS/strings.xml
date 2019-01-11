@@ -5,4 +5,13 @@
     <string name="data_charged">Data loaded successfully</string>
     <string name="db_error">Error trying to connect to the database</string>
     <string name="loading_data">Loading data</string>
+    <string name="add_list">Create list</string>
+    <string name="settings_text">Settings</string>
+    <string name="start_service">Start service</string>
+    <string name="stop_service">Stop service</string>
+    <string name="register">Create user</string>
+    <string name="user">User</string>
+    <string name="password">Password</string>
+    <string name="user_desc">Your username</string>
+    <string name="password_desc">Your password</string>
 </resources>

@@ -5,8 +5,10 @@ package com.example.rojo.milistadelacompra;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,14 +77,15 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        for (int i = 0; i < listas.size(); i++) {
-            Button boton = new Button(this.getActivity());
-            boton.setLayoutParams(layoutParams);
-            boton.setText(listas.get(i));
-            boton.setTag(listas.get(i));
-            boton.setOnClickListener(this);
-            layout.addView(boton);
+        if(listas!=null){
+            for (int i = 0; i < listas.size(); i++) {
+                Button boton = new Button(this.getActivity());
+                boton.setLayoutParams(layoutParams);
+                boton.setText(listas.get(i));
+                boton.setTag(listas.get(i));
+                boton.setOnClickListener(this);
+                layout.addView(boton);
+            }
         }
     }
 
@@ -93,10 +96,13 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         View view;
         MainFragment main;
         ArrayList<String> listas;
+        SharedPreferences preferencias;
+
         public ConnectMySql(View view, Context contexto, MainFragment main){
             this.view = view;
             this.contexto = contexto;
             this.main = main;
+            preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
         }
 
         @Override
@@ -114,9 +120,11 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 Connection con = DriverManager.getConnection(url, user, pass);
                 System.out.println("Database conection success");
 
+                String user = preferencias.getString("user", "");
+
 
                 Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from ListaCompra where estado = '1';");
+                ResultSet rs = st.executeQuery("select * from ListaCompra where nickUsuario = '"+user+"' and estado = '1';");
                 ResultSetMetaData rsmd = rs.getMetaData();
                 String result = getResources().getString(R.string.data_charged);
                 listas = new ArrayList<String>();

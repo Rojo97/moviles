@@ -4,9 +4,11 @@ package com.example.rojo.milistadelacompra;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,7 +97,6 @@ public class ListaFragment extends Fragment{
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
                 System.out.println("Database conection success");
-
 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select * from Elemento where nombreLista = '"+ listaNombre+"';");
