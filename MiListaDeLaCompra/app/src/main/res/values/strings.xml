@@ -17,4 +17,8 @@
     <string name="add_element">Añadir elemento</string>
     <string name="delete_element">Añadir elemento</string>
     <string name="delete_list">Eliminar lista</string>
+    <string name="register_text">Registrarse</string>
+    <string name="new_name">Nombre</string>
+    <string name="new_surname1">Apellido 1</string>
+    <string name="new_surname2">Apellido 2</string>
 </resources>

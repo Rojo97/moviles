@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10pt"
+    android:orientation="vertical"
+    tools:context="com.example.rojo.milistadelacompra.RegisterActivity">
+
+    <TextView
+        android:id="@+id/text_lists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register_text"
+        tools:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/new_user_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/user" />
+
+    <EditText
+        android:id="@+id/new_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/new_password_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/password" />
+
+    <EditText
+        android:id="@+id/new_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/new_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_name" />
+
+    <EditText
+        android:id="@+id/new_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/new_surname1_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_surname1" />
+
+    <EditText
+        android:id="@+id/new_surname1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/new_surname2_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_surname2" />
+
+    <EditText
+        android:id="@+id/new_surname2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register_text" />
+
+</LinearLayout>

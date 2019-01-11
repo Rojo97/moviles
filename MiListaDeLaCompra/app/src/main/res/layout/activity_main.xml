@@ -10,7 +10,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_listas"
+        android:id="@+id/fragment_main"
         android:name="com.example.rojo.milistadelacompra.MainFragment"
         android:layout_centerHorizontal="true" />
 </android.support.constraint.ConstraintLayout>
