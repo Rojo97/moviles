@@ -107,7 +107,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 String subSql = "select * from " + StatusContract.TABLEPARTICIPACION + " where " + StatusContract.ColumnParticipacion.LISTA + " = L."
                         + StatusContract.ColumnListaCompra.ID + " and " + StatusContract.ColumnParticipacion.USER + " = '"+user+"'";
 
-                String sql = "select * from " + StatusContract.TABLELISTACOMPRA + " L where exists ( " + subSql +" )" ;
+                String sql = "select * from " + StatusContract.TABLELISTACOMPRA + " L where " + StatusContract.ColumnListaCompra.STATUS + " = 1"+
+                " and exists ( " + subSql +" )" ;
 
                 Log.d(TAG, " Db "+sql);
 

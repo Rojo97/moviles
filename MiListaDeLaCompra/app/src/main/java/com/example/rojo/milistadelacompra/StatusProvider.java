@@ -22,8 +22,8 @@ public class StatusProvider extends ContentProvider {
 
     static {
         sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sURIMatcher.addURI(StatusContract.AUTHORITY, StatusContract.TABLE, StatusContract.STATUS_DIR);
-        sURIMatcher.addURI(StatusContract.AUTHORITY, StatusContract.TABLE + "/#", StatusContract.STATUS_ITEM);
+        sURIMatcher.addURI(StatusContract.AUTHORITY, StatusContract.TABLELISTACOMPRA, StatusContract.STATUS_DIR_LISTA);
+        sURIMatcher.addURI(StatusContract.AUTHORITY, StatusContract.TABLELISTACOMPRA + "/*", StatusContract.STATUS_ITEM_LISTA);
     }
 
     @Override
@@ -35,25 +35,26 @@ public class StatusProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
             String where;
+            String table;
             switch (sURIMatcher.match(uri)) {
-                case StatusContract.STATUS_DIR:
-                    where = s;
+                case StatusContract.STATUS_DIR_LISTA:
+                    where = selection;
                     break;
-                case StatusContract.STATUS_ITEM:
+                case StatusContract.STATUS_ITEM_LISTA:
                     long id = ContentUris.parseId(uri);
                     where = StatusContract.Column.ID
                             + "="
                             + id
-                            + (TextUtils.isEmpty(s) ? "" : " and ( " + s + " )");
+                            + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
                     break;
                 default:
                     throw new IllegalArgumentException("uri incorrecta: " + uri);
             }
-            String orderBy = (TextUtils.isEmpty(s1)) ? StatusContract.DEFAULT_SORT : s1;
+            String orderBy = (TextUtils.isEmpty(sortOrder)) ? StatusContract.DEFAULT_SORT : sortOrder;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(StatusContract.TABLE, strings, where, strings1, null, null,
+            Cursor cursor = db.query(StatusContract.TABLE, projection, where, selectionArgs, null, null,
                     orderBy);
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             Log.d(TAG, "registros recuperados: " + cursor.getCount());
@@ -64,10 +65,10 @@ public class StatusProvider extends ContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
         switch (sURIMatcher.match(uri)) {
-            case StatusContract.STATUS_DIR:
+            case StatusContract.STATUS_DIR_LISTA:
                 Log.d(TAG, "gotType: vnd.android.cursor.dir/vnd.com.example.rojo.milistadelacompra.provider.status");
                 return "vnd.android.cursor.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
-            case StatusContract.STATUS_ITEM:
+            case StatusContract.STATUS_ITEM_LISTA:
                 Log.d(TAG, "gotType: vnd.android.cursor.item/vnd.com.example.rojo.milistadelacompra.provider.status");
                 return
                         "vnd.android.cursor.item/vnd.com.example.rojo.milistadelacompra.provider.status";
@@ -81,7 +82,7 @@ public class StatusProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         Uri ret = null;
         // Nos aseguramos de que la URI es correcta
-        if (sURIMatcher.match(uri) != StatusContract.STATUS_DIR) {
+        if (sURIMatcher.match(uri) != StatusContract.STATUS_DIR_LISTA) {
             throw new IllegalArgumentException("uri incorrecta: " + uri);
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -101,10 +102,10 @@ public class StatusProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         String where;
         switch (sURIMatcher.match(uri)) {
-            case StatusContract.STATUS_DIR:
+            case StatusContract.STATUS_DIR_LISTA:
                 where = s;
                 break;
-            case StatusContract.STATUS_ITEM:
+            case StatusContract.STATUS_ITEM_LISTA:
                 long id = ContentUris.parseId(uri);
                 where = StatusContract.Column.ID
                         + "="
@@ -127,10 +128,10 @@ public class StatusProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         String where;
         switch (sURIMatcher.match(uri)) {
-            case StatusContract.STATUS_DIR:
+            case StatusContract.STATUS_DIR_LISTA:
                 where = s;
                 break;
-            case StatusContract.STATUS_ITEM:
+            case StatusContract.STATUS_ITEM_LISTA:
                 long id = ContentUris.parseId(uri);
                 where = StatusContract.Column.ID
                         + "="
