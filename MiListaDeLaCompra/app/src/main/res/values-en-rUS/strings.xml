@@ -41,4 +41,7 @@
     <string name="delete_list_title">Delete list</string>
     <string name="delete_list_name">Name of the list</string>
     <string name="delete_list_button_text">Delete</string>
+    <string name="delete_item_title_text">Delete item</string>
+    <string name="delete_item_name">Name of the item</string>
+    <string name="delete_item_button_text">Delete</string>
 </resources>

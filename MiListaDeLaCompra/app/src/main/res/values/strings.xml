@@ -41,4 +41,7 @@
     <string name="delete_list_title">Eliminar lista</string>
     <string name="delete_list_name">Nombre de la lista</string>
     <string name="delete_list_button_text">Borrar</string>
+    <string name="delete_item_title_text">Borrar elemento</string>
+    <string name="delete_item_name">Nombre del elemento</string>
+    <string name="delete_item_button_text">Eliminar</string>
 </resources>
