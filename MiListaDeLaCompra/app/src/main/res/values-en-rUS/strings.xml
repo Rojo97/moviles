@@ -32,4 +32,9 @@
     <string name="new_item_quantity_text">Quantity</string>
     <string name="new_item_prize_text">Prize</string>
     <string name="new_item_buttom_text">Add</string>
+    <string name="share_list_text_fragment">Share the list: </string>
+    <string name="share_list_text_user">User to share with</string>
+    <string name="share_lit_button_text">Share</string>
+    <string name="user_not_found">Unable to share with the user</string>
+    <string name="share_ok">List shared successfully</string>
 </resources>

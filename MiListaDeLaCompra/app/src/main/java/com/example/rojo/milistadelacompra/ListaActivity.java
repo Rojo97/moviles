@@ -43,9 +43,14 @@ public class ListaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_element:
-                Intent intent = new Intent(this, CreateItemActivity.class);
-                intent.putExtras(this.getIntent().getExtras());
-                startActivity(intent);
+                Intent intentAdd = new Intent(this, CreateItemActivity.class);
+                intentAdd.putExtras(this.getIntent().getExtras());
+                startActivity(intentAdd);
+                return true;
+            case R.id.share_list:
+                Intent intentShare = new Intent(this, ShareListActivity.class);
+                intentShare.putExtras(this.getIntent().getExtras());
+                startActivity(intentShare);
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
