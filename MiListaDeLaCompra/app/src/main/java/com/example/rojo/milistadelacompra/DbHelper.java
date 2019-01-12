@@ -34,14 +34,15 @@ public class DbHelper extends SQLiteOpenHelper {
                     StatusContract.ColumnListaCompra.USER,
                     StatusContract.ColumnListaCompra.STATUS);
 
-            String sqlParticipacion = String.format("create table %s (%s int primary key, %s text, %s text, foreign key (%s) references %s (%s))",
+            String sqlParticipacion = String.format("create table %s (%s text, %s text, foreign key (%s) references %s (%s), primary key (%s, %s))",
                     StatusContract.TABLEPARTICIPACION,
-                    StatusContract.ColumnParticipacion.ID,
                     StatusContract.ColumnParticipacion.USER,
                     StatusContract.ColumnParticipacion.LISTA,
                     StatusContract.ColumnParticipacion.LISTA,
                     StatusContract.TABLELISTACOMPRA,
-                    StatusContract.ColumnListaCompra.ID);
+                    StatusContract.ColumnListaCompra.ID,
+                    StatusContract.ColumnParticipacion.USER,
+                    StatusContract.ColumnParticipacion.LISTA);
 
             String sqlElemento = String.format("create table %s (%s text , %s int, %s float, %s text, %s int, foreign key (%s) references %s (%s), primary key (%s, %s))",
                     StatusContract.TABLEELEMENTO,

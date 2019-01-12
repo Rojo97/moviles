@@ -111,12 +111,10 @@ public class RefreshService extends IntentService {
             ContentValues values = new ContentValues();
 
             while(rs.next()){
-                int ID = rs.getInt("ID");
                 String nombreLista = rs.getString("nombreLista");
 
                 // Insertar en la base de datos
                 values.clear();
-                values.put(StatusContract.ColumnParticipacion.ID, ID);
                 values.put(StatusContract.ColumnParticipacion.USER, user);
                 values.put(StatusContract.ColumnParticipacion.LISTA, nombreLista);
                 db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,
@@ -176,15 +174,13 @@ public class RefreshService extends IntentService {
                     idLista, StatusContract.ColumnParticipacion.USER, user));
 
             while(rs.next()){
-                int ID = rs.getInt("ID");
                 String nickUsuario = rs.getString("nickUsuario");
 
                 // Imprimimos las actualizaciones en el log
-                Log.d(TAG, String.format("AAAA %d, %s: %s Db", ID, nickUsuario, idLista));
+                Log.d(TAG, String.format("AAAA %s: %s Db", nickUsuario, idLista));
                 // Insertar en la base de datos
 
                 values.clear();
-                values.put(StatusContract.ColumnParticipacion.ID, ID);
                 values.put(StatusContract.ColumnParticipacion.USER, nickUsuario);
                 values.put(StatusContract.ColumnParticipacion.LISTA, idLista);
                 db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,

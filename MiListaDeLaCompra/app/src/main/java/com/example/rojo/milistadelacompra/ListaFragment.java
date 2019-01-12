@@ -5,6 +5,8 @@ package com.example.rojo.milistadelacompra;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,11 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ListaFragment extends Fragment{
@@ -31,9 +28,8 @@ public class ListaFragment extends Fragment{
     private static final String TAG = ListaFragment.class.getSimpleName();
     private TextView nombreTextview;
     private String listaNombre;
-    private static final String url = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
-    private static final String user = "root";
-    private static final String pass = "";
+    private DbHelper dbHelper;
+    private SQLiteDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -46,6 +42,10 @@ public class ListaFragment extends Fragment{
             listaNombre = bundle.getString("LISTA_NOMBRE");
             nombreTextview.setText(listaNombre);
         }
+
+        if(isAdded()){
+            dbHelper = new DbHelper(getActivity());
+        }
         return view;
     }
 
@@ -55,16 +55,18 @@ public class ListaFragment extends Fragment{
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        for (int i = 0; i < productos.size(); i++) {
-            CheckBox item = new CheckBox(this.getActivity());
-            item.setLayoutParams(layoutParams);
-            item.setText(productos.get(i));
-            item.setTag(productos.get(i));
-            //item.setOnClickListener(this);
-            item.setTextSize(25);
-            layout.addView(item);
-            this.getView().destroyDrawingCache();
-            this.getView().refreshDrawableState();
+        if(productos!=null){
+            for (int i = 0; i < productos.size(); i++) {
+                CheckBox item = new CheckBox(this.getActivity());
+                item.setLayoutParams(layoutParams);
+                item.setText(productos.get(i));
+                item.setTag(productos.get(i));
+                //item.setOnClickListener(this);
+                item.setTextSize(25);
+                layout.addView(item);
+                this.getView().destroyDrawingCache();
+                this.getView().refreshDrawableState();
+            }
         }
     }
 
@@ -94,24 +96,25 @@ public class ListaFragment extends Fragment{
         @Override
         protected String doInBackground(String... params) {
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection(url, user, pass);
-                System.out.println("Database conection success");
+                db = dbHelper.getReadableDatabase();
 
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from Elemento where nombreLista = '"+ listaNombre+"';");
-                ResultSetMetaData rsmd = rs.getMetaData();
+                String sql = "select * from " + StatusContract.TABLEELEMENTO + " where " + StatusContract.ColumnElemento.IDLISTA + " = '"+ listaNombre + "'";
+                String[] args = {};
+                Cursor c = db.rawQuery(sql,  args);
+
                 String result = getResources().getString(R.string.data_charged);
-                productos = new ArrayList<String>();
+                productos = new ArrayList<>();
 
-                while (rs.next()) {
-                    productos.add(rs.getString(1));
+                while(c.moveToNext()){
+                    productos.add(c.getString(0));
                 }
+
+                db.close();
                 res = result;
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e(TAG, e.toString());
+                Log.e(TAG, e.toString() + " Db " + e.getMessage());
                 res = getResources().getString(R.string.db_error);
             }
             return res;
