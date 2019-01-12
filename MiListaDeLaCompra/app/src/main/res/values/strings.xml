@@ -37,4 +37,7 @@
     <string name="share_lit_button_text">Compartir</string>
     <string name="user_not_found">No se ha posido compartir con el usuario</string>
     <string name="share_ok">Lista compartida con exito</string>
+    <string name="delete_list_title">Eliminar lista</string>
+    <string name="delete_list_name">Nombre de la lista</string>
+    <string name="delete_list_button_text">Borrar</string>
 </resources>

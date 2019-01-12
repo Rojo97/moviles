@@ -18,6 +18,11 @@
         android:title="@string/register" />
 
     <item
+        android:id="@+id/delete_list"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/delete_list" />
+
+    <item
         android:id="@+id/itemServiceStart"
         android:title="@string/start_service"
         android:icon="@android:drawable/ic_media_play" />
