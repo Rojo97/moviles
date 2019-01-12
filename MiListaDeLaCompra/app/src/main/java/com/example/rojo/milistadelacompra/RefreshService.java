@@ -19,7 +19,7 @@ import java.sql.Statement;
 public class RefreshService extends IntentService {
     static final String TAG = "RefreshService";
 
-    static final int DELAY = 10000; // medio minuto
+    static final int DELAY = 20000; // medio minuto
     private boolean runFlag = false;
 
     public RefreshService() {
@@ -43,11 +43,10 @@ public class RefreshService extends IntentService {
 
         this.runFlag = true;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String user = prefs.getString("user", "");
-
         while (runFlag) {
             Log.d(TAG, "Updater running Db");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String user = prefs.getString("user", "");
             try {
                 updateDB(user);
                 Thread.sleep(DELAY);
