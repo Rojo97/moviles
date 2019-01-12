@@ -124,13 +124,13 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
 
                 Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from ListaCompra where nickUsuario = '"+user+"' and estado = '1';");
+                ResultSet rs = st.executeQuery("select * from Participacion p join ListaCompra l where p.nombreLista = l.nombre and p.nickUsuario = '"+user+"' and estado = '1';");
                 ResultSetMetaData rsmd = rs.getMetaData();
                 String result = getResources().getString(R.string.data_charged);
                 listas = new ArrayList<String>();
 
                 while (rs.next()) {
-                    listas.add(rs.getString(1));
+                    listas.add(rs.getString(3));
 
                 }
                 res = result;

@@ -25,6 +25,14 @@ public class ListaActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_lista, menu);
         return true;
