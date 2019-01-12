@@ -15,6 +15,7 @@
         <activity android:name=".ListaActivity"></activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".RegisterActivity"/>
+        <activity android:name=".CreateListActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

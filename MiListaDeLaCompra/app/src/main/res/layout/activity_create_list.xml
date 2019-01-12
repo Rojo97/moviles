@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".RegisterActivity">
+    tools:context=".CreateListActivity">
     <fragment
         android:id="@+id/fragment_register"
-        android:name="com.example.rojo.milistadelacompra.RegisterFragment"
+        android:name="com.example.rojo.milistadelacompra.CreateListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

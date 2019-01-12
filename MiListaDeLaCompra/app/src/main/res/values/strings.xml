@@ -15,10 +15,16 @@
     <string name="user_desc">Tu nombre de usuario</string>
     <string name="password_desc">Tu contraseña</string>
     <string name="add_element">Añadir elemento</string>
-    <string name="delete_element">Añadir elemento</string>
+    <string name="delete_element">Eliminar elemento</string>
     <string name="delete_list">Eliminar lista</string>
     <string name="register_text">Registrarse</string>
     <string name="new_name">Nombre</string>
     <string name="new_surname1">Apellido 1</string>
     <string name="new_surname2">Apellido 2</string>
+    <string name="share_list_text">Compartir esta lista</string>
+    <string name="create_list_text">Crear nueva lista</string>
+    <string name="new_list_name">Nombre de la lista</string>
+    <string name="create_list_button">Crear</string>
+    <string name="saving_data">Guardando datos</string>
+    <string name="data_saved">Datos guardados</string>
 </resources>

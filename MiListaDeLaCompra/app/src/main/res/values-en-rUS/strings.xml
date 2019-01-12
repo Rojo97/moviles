@@ -21,4 +21,10 @@
     <string name="new_name">Name</string>
     <string name="new_surname1">Surname 1</string>
     <string name="new_surname2">Surname 2</string>
+    <string name="share_list_text">Share this list</string>
+    <string name="create_list_text">Create new list</string>
+    <string name="new_list_name">Name of the list</string>
+    <string name="create_list_button">Create</string>
+    <string name="saving_data">Saving data</string>
+    <string name="data_saved">Data saved</string>
 </resources>

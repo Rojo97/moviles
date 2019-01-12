@@ -17,6 +17,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_principal, menu);
         return true;
@@ -31,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.add_list:
-                startActivity(new Intent(this, ListaActivity.class));
+                startActivity(new Intent(this, CreateListActivity.class));
                 return true;
             case R.id.itemServiceStart:
                 startService(new Intent(this, RefreshService.class));
