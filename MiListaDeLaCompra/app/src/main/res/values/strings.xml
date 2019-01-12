@@ -4,6 +4,7 @@
     <string name="add_product">Añadir producto</string>
     <string name="data_charged">Datos cargados con exito</string>
     <string name="db_error">Error al conectar con la base de datos</string>
+    <string name="db_duplicate_list">Ya existe una lista con ese nombre</string>
     <string name="loading_data">Cargando datos</string>
     <string name="add_list">Crear lista</string>
     <string name="settings_text">Ajustes</string>

@@ -3,6 +3,7 @@ package com.example.rojo.milistadelacompra;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,12 +17,15 @@ import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class CreateListFragment extends Fragment implements View.OnClickListener {
     private Button boton;
     private static final String TAG = ListaFragment.class.getSimpleName();
     private EditText newList;
+    private DbHelper dbHelper;
+    private SQLiteDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -29,6 +33,11 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
         boton = view.findViewById(R.id.new_list_button);
         boton.setOnClickListener(this);
         newList = view.findViewById(R.id.new_list_name);
+
+        if(isAdded()){
+            dbHelper = new DbHelper(getActivity());
+        }
+
         return view;
     }
 
@@ -69,18 +78,31 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
                 Connection con = DriverManager.getConnection(url, user, pass);
                 System.out.println("Database conection success");
 
+                db = dbHelper.getWritableDatabase();
+
                 String listName = params[0];
                 SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
                 String user = preferencias.getString("user", "");
 
                 Statement st = con.createStatement();
                 Log.e(TAG, "insert into ListaCompra values ('"+listName+"', '"+ user + "', '"+1+");");
-                st.execute("insert into ListaCompra values ('"+listName+"', '"+ user + "', "+1+");");
-                st.execute("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
+                st.executeUpdate("insert into ListaCompra values ('"+listName+"', '"+ user + "', "+1+");");
+                st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
+
+                //Se añade la lista en la bd local
+                String sql = String.format("insert into %s (%s, %s, %s) values ('%s', '%s', %d)", StatusContract.TABLELISTACOMPRA,
+                        StatusContract.ColumnListaCompra.ID, StatusContract.ColumnListaCompra.USER, StatusContract.ColumnListaCompra.STATUS,
+                        listName, user, 1);
+                db.execSQL(sql);
+
                 String result = getResources().getString(R.string.data_saved);
                 res = result;
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Log.e(TAG, e.toString());
+                res = getResources().getString(R.string.db_duplicate_list);
+            }catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, e.toString());
                 res = getResources().getString(R.string.db_error);
