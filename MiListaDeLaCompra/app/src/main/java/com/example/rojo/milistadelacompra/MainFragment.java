@@ -99,9 +99,18 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             try {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String user = prefs.getString("user", "");
+
                 db = dbHelper.getReadableDatabase();
 
-                String sql = "select * from " + StatusContract.TABLELISTACOMPRA;
+                String subSql = "select * from " + StatusContract.TABLEPARTICIPACION + " where " + StatusContract.ColumnParticipacion.LISTA + " = L."
+                        + StatusContract.ColumnListaCompra.ID + " and " + StatusContract.ColumnParticipacion.USER + " = '"+user+"'";
+
+                String sql = "select * from " + StatusContract.TABLELISTACOMPRA + " L where exists ( " + subSql +" )" ;
+
+                Log.d(TAG, " Db "+sql);
+
                 String[] args = {};
                 Cursor c = db.rawQuery(sql,  args);
 
