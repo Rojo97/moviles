@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,48 +16,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
 import java.util.ArrayList;
+import android.database.sqlite.SQLiteDatabase;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = MainFragment.class.getSimpleName();
-    private static final String url = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
-    private static final String user = "root";
-    private static final String pass = "";
-    String res;
+    private DbHelper dbHelper;
+    private SQLiteDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        int botones = 5;
+
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         ConnectMySql connectMySql = new ConnectMySql(view, this.getActivity(), this);
         connectMySql.execute("");
-        //LinearLayout layout = view.findViewById(R.id.my_lists_buttons);
 
-        //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                //LinearLayout.LayoutParams.WRAP_CONTENT);
-        /*for (int i = 0; i < botones; i++){
-            Button boton = new Button(this.getActivity());
-            boton.setLayoutParams(layoutParams);
-            boton.setText("Aqui va la lista " + i);
-            boton.setId(i);
-            boton.setOnClickListener(this);
-            layout.addView(boton);
-
-        }*/
+        if(isAdded()){
+            dbHelper = new DbHelper(getActivity());
+        }
         return view;
 
     }
@@ -116,23 +99,20 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection(url, user, pass);
-                System.out.println("Database conection success");
+                db = dbHelper.getReadableDatabase();
 
-                String user = preferencias.getString("user", "");
+                String sql = "select * from " + StatusContract.TABLELISTACOMPRA;
+                String[] args = {};
+                Cursor c = db.rawQuery(sql,  args);
 
-
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from Participacion p join ListaCompra l where p.nombreLista = l.nombre and p.nickUsuario = '"+user+"' and estado = '1';");
-                ResultSetMetaData rsmd = rs.getMetaData();
                 String result = getResources().getString(R.string.data_charged);
                 listas = new ArrayList<String>();
 
-                while (rs.next()) {
-                    listas.add(rs.getString(3));
-
+                while(c.moveToNext()){
+                    listas.add(c.getString(0));
                 }
+
+                db.close();
                 res = result;
             } catch (Exception e) {
                 e.printStackTrace();
