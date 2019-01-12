@@ -26,8 +26,8 @@ public class StatusContract {
     // content://com.example.rojo.milistadelacompra.StatusProvider/status
     public static final String AUTHORITY = "com.example.rojo.milistadelacompra.StatusProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLEPARTICIPACION);
-    public static final int STATUS_ITEM = 1;
-    public static final int STATUS_DIR = 2;
+    public static final int STATUS_ITEM_LISTA = 1;
+    public static final int STATUS_DIR_LISTA = 2;
 
     public class ColumnParticipacion {
         public static final String ID = BaseColumns._ID;
