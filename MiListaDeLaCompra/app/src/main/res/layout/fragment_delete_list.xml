@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10pt"
+    android:orientation="vertical"
+    tools:context="com.example.rojo.milistadelacompra.DeleteListActivity">
+
+    <TextView
+        android:id="@+id/texte_delete_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_list_title"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/delete_list_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_list_name" />
+
+    <Spinner
+        android:id="@+id/select_listas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"/>
+
+    <Button
+        android:id="@+id/delete_list_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_list_button_text" />
+
+</LinearLayout>
