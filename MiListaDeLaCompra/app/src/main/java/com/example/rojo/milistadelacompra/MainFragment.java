@@ -21,7 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class MainFragment extends Fragment implements View.OnClickListener{
+public class MainFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
@@ -41,7 +41,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         int i = view.getId();
-        Log.d(TAG,"OnClicked " + view.getTag());
+        Log.d(TAG, "OnClicked " + view.getTag());
         Intent intentLista = new Intent(view.getContext(), ListaActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("LISTA_NOMBRE", view.getTag().toString());
@@ -49,12 +49,12 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         startActivity(intentLista);
     }
 
-    public void onTaskFinished(ArrayList<String> listas){
+    public void onTaskFinished(ArrayList<String> listas) {
         LinearLayout layout = this.getView().findViewById(R.id.my_lists_buttons);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        if(listas!=null){
+        if (listas != null) {
             for (int i = 0; i < listas.size(); i++) {
                 Button boton = new Button(this.getActivity());
                 boton.setLayoutParams(layoutParams);
@@ -75,7 +75,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         ArrayList<String> listas;
         SharedPreferences preferencias;
 
-        public ConnectMySql(View view, Context contexto, MainFragment main){
+        public ConnectMySql(View view, Context contexto, MainFragment main) {
             this.view = view;
             this.contexto = contexto;
             this.main = main;
@@ -97,10 +97,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 String user = prefs.getString("user", "");
 
                 String subSql = "select * from " + CarroCompraContract.TABLEPARTICIPACION + " where " + CarroCompraContract.ColumnParticipacion.LISTA + " = "
-                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '"+user+"'";
+                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
 
-                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1"+
-                        " and exists ( " + subSql +" )" ;
+                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1" +
+                        " and exists ( " + subSql + " )";
 
                 Cursor c = getActivity().getContentResolver().query(CarroCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
 
@@ -108,7 +108,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 listas = new ArrayList<String>();
 
 
-                while(c.moveToNext()){
+                while (c.moveToNext()) {
                     listas.add(c.getString(0));
                 }
 

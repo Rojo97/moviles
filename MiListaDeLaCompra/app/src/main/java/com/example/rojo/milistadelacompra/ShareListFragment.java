@@ -1,8 +1,10 @@
 package com.example.rojo.milistadelacompra;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,6 +21,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ShareListFragment extends Fragment implements View.OnClickListener {
@@ -29,7 +32,7 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
     private TextView titulo;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_share_list, container, false);
         boton = view.findViewById(R.id.share_list_button);
         boton.setOnClickListener(this);
@@ -38,9 +41,9 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
         String title = titulo.getText().toString();
         String user = userToShare.getText().toString();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             lista = bundle.getString("LISTA_NOMBRE");
-            title = title +" "+ lista;
+            title = title + " " + lista;
             //titulo.setText(title);
             //view.refreshDrawableState();
         }
@@ -62,7 +65,7 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
         private static final String user = "root";
         private static final String pass = "";
 
-        public ConnectMySql(View view, Context contexto){
+        public ConnectMySql(View view, Context contexto) {
             this.view = view;
             this.contexto = contexto;
         }
@@ -78,7 +81,7 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
         @Override
         protected String doInBackground(String... params) {
             String res;
-            Log.d(TAG, "Trying to insert "+ params[0] +" "+ params[1]);
+            Log.d(TAG, "Trying to insert " + params[0] + " " + params[1]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
@@ -87,21 +90,43 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
                 String user = params[0];
                 String lista = params[1];
 
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from Usuario where nick= '"+user+"';");
-                rs.next();
-                String userFound = rs.getString(1);
-                Log.e(TAG, "found "+ userFound);
-                String result;
-                if(user.equals(userFound)){
-                    Log.e(TAG, "insert into Participacion (nickUsuario, nombreLista) values ('"+user+"', '"+ lista + "');");
-                    st.execute("insert into Participacion (nickUsuario, nombreLista) values ('"+user+"', '"+ lista + "');");
-                    result = getResources().getString(R.string.share_ok);
-                }else{
-                    result = getResources().getString(R.string.user_not_found);
+                String result = "";
+
+                if (!user.equals("")) {
+
+                    user = user.trim();
+
+                    Statement st = con.createStatement();
+                    ResultSet rs = st.executeQuery("select * from Usuario where nick= '" + user + "';");
+
+                    if (rs.next()) {
+                        String userFound = rs.getString(1);
+                        Log.e(TAG, "found " + userFound);
+                        Log.e(TAG, "insert into Participacion (nickUsuario, nombreLista) values ('" + user + "', '" + lista + "');");
+                        st.execute("insert into Participacion (nickUsuario, nombreLista) values ('" + user + "', '" + lista + "');");
+
+                        //Guardo el elemento en la bd local
+                        ContentValues values = new ContentValues();
+                        values.clear();
+                        values.put(CarroCompraContract.ColumnParticipacion.USER, user);
+                        values.put(CarroCompraContract.ColumnParticipacion.LISTA, lista);
+                        Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + lista + "/Participantes");
+                        getActivity().getContentResolver().insert(uri, values);
+
+                        result = getResources().getString(R.string.share_ok);
+                    } else {
+                        result = getResources().getString(R.string.user_not_found);
+                    }
+                } else {
+                    result = getResources().getString(R.string.insert_user_name);
                 }
+
                 res = result;
 
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Log.e(TAG, e.toString());
+                res = getResources().getString(R.string.db_duplicate_participacion);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, e.toString());

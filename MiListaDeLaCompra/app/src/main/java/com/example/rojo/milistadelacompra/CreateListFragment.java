@@ -30,13 +30,13 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
     private SQLiteDatabase db;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_list, container, false);
         boton = view.findViewById(R.id.new_list_button);
         boton.setOnClickListener(this);
         newList = view.findViewById(R.id.new_list_name);
 
-        if(isAdded()){
+        if (isAdded()) {
             dbHelper = new DbHelper(getActivity());
         }
 
@@ -58,7 +58,7 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
         private static final String user = "root";
         private static final String pass = "";
 
-        public ConnectMySql(View view, Context contexto){
+        public ConnectMySql(View view, Context contexto) {
             this.view = view;
             this.contexto = contexto;
         }
@@ -74,7 +74,7 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
         @Override
         protected String doInBackground(String... params) {
             String res;
-            Log.d(TAG, "Trying to insert "+ params[0]);
+            Log.d(TAG, "Trying to insert " + params[0]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
@@ -82,16 +82,16 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
 
                 String listName = params[0];
 
-                if(!listName.equals("")){
+                if (!listName.equals("")) {
                     SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
                     String user = preferencias.getString("user", "");
 
                     listName = listName.trim();
 
                     Statement st = con.createStatement();
-                    Log.e(TAG, "insert into ListaCompra values ('"+listName+"', '"+ user + "', '"+1+");");
-                    st.executeUpdate("insert into ListaCompra values ('"+listName+"', '"+ user + "', "+1+");");
-                    st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
+                    Log.e(TAG, "insert into ListaCompra values ('" + listName + "', '" + user + "', '" + 1 + ");");
+                    st.executeUpdate("insert into ListaCompra values ('" + listName + "', '" + user + "', " + 1 + ");");
+                    st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('" + user + "', '" + listName + "');");
 
 
                     //Guardo los datos en la bd local
@@ -110,7 +110,7 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
 
                     String result = getResources().getString(R.string.data_saved);
                     res = result;
-                }else{
+                } else {
                     res = getResources().getString(R.string.insert_list_name);
                 }
 
@@ -119,7 +119,7 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
                 e.printStackTrace();
                 Log.e(TAG, e.toString());
                 res = getResources().getString(R.string.db_duplicate_list);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, e.toString());
                 res = getResources().getString(R.string.db_error);

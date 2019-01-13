@@ -44,74 +44,74 @@ public class CarroCompraProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-            String where;
-            String table;
-            String orderBy = null;
-            String id;
-            String nombreLista;
-            String nombreElemento;
-            switch (sURIMatcher.match(uri)) {
-                case CarroCompraContract.STATUS_DIR_LISTA:
-                    where = selection;
-                    table = CarroCompraContract.TABLELISTACOMPRA;
-                    orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_LISTA : sortOrder;
-                    break;
-                case CarroCompraContract.STATUS_ITEM_LISTA:
-                    id = uri.getLastPathSegment();
-                    where = CarroCompraContract.ColumnListaCompra.ID
-                            + "= '"
-                            + id
-                            + "' "
-                            + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                    table = CarroCompraContract.TABLELISTACOMPRA;
-                    break;
-                case CarroCompraContract.STATUS_DIR_PARTICIPACION:
-                    where = selection;
-                    table = CarroCompraContract.TABLEPARTICIPACION;
-                    orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_PARTICIPACION : sortOrder;
-                    break;
-                case CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA:
-                    String nombreUser = uri.getLastPathSegment();
-                    nombreLista = uri.getPathSegments().get(1);
+        String where;
+        String table;
+        String orderBy = null;
+        String id;
+        String nombreLista;
+        String nombreElemento;
+        switch (sURIMatcher.match(uri)) {
+            case CarroCompraContract.STATUS_DIR_LISTA:
+                where = selection;
+                table = CarroCompraContract.TABLELISTACOMPRA;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_LISTA : sortOrder;
+                break;
+            case CarroCompraContract.STATUS_ITEM_LISTA:
+                id = uri.getLastPathSegment();
+                where = CarroCompraContract.ColumnListaCompra.ID
+                        + "= '"
+                        + id
+                        + "' "
+                        + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
+                table = CarroCompraContract.TABLELISTACOMPRA;
+                break;
+            case CarroCompraContract.STATUS_DIR_PARTICIPACION:
+                where = selection;
+                table = CarroCompraContract.TABLEPARTICIPACION;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_PARTICIPACION : sortOrder;
+                break;
+            case CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA:
+                String nombreUser = uri.getLastPathSegment();
+                nombreLista = uri.getPathSegments().get(1);
 
-                    where = CarroCompraContract.ColumnParticipacion.LISTA
-                            + "= '"
-                            + nombreLista
-                            + "' and "
-                            + CarroCompraContract.ColumnParticipacion.USER
-                            + "= '"
-                            + nombreUser
-                            + "' "
-                            + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                    table = CarroCompraContract.TABLEPARTICIPACION;
-                    break;
-                case CarroCompraContract.STATUS_DIR_ELEMENTO:
-                    where = selection;
-                    table = CarroCompraContract.TABLEELEMENTO;
-                    orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
-                    break;
-                case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
-                    nombreLista = uri.getPathSegments().get(1);
+                where = CarroCompraContract.ColumnParticipacion.LISTA
+                        + "= '"
+                        + nombreLista
+                        + "' and "
+                        + CarroCompraContract.ColumnParticipacion.USER
+                        + "= '"
+                        + nombreUser
+                        + "' "
+                        + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
+                table = CarroCompraContract.TABLEPARTICIPACION;
+                break;
+            case CarroCompraContract.STATUS_DIR_ELEMENTO:
+                where = selection;
+                table = CarroCompraContract.TABLEELEMENTO;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
+                break;
+            case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
+                nombreLista = uri.getPathSegments().get(1);
 
-                    where = CarroCompraContract.ColumnElemento.IDLISTA
-                            + "= '"
-                            + nombreLista
-                            + "' "
-                            + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                    table = CarroCompraContract.TABLEELEMENTO;
-                    orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
-                    break;
+                where = CarroCompraContract.ColumnElemento.IDLISTA
+                        + "= '"
+                        + nombreLista
+                        + "' "
+                        + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
+                table = CarroCompraContract.TABLEELEMENTO;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
+                break;
 
-                default:
-                    throw new IllegalArgumentException("uri incorrecta: " + uri);
-            }
+            default:
+                throw new IllegalArgumentException("uri incorrecta: " + uri);
+        }
 
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(table, projection, where, selectionArgs, null, null,
-                    orderBy);
-            cursor.setNotificationUri(getContext().getContentResolver(), uri);
-            Log.d(TAG, "registros recuperados de la Db : " + cursor.getCount());
-            return cursor;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(table, projection, where, selectionArgs, null, null,
+                orderBy);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        Log.d(TAG, "registros recuperados de la Db : " + cursor.getCount());
+        return cursor;
     }
 
     @Nullable
@@ -148,7 +148,7 @@ public class CarroCompraProvider extends ContentProvider {
         Uri ret = null;
         String table;
 
-        switch (sURIMatcher.match(uri)){
+        switch (sURIMatcher.match(uri)) {
             case CarroCompraContract.STATUS_DIR_LISTA:
                 table = CarroCompraContract.TABLELISTACOMPRA;
                 break;

@@ -66,7 +66,7 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "onDestroyed");
     }
 
-    private void updateDB(String user, String pass){
+    private void updateDB(String user, String pass) {
         // Iteramos sobre todos los componentes de timeline
         db = dbHelper.getWritableDatabase();
 
@@ -84,7 +84,7 @@ public class RefreshService extends IntentService {
             String sql = "select * from Usuario where nick = '" + user + "' and contrasenia = '" + pass + "';";
             ResultSet rs = st.executeQuery(sql);
 
-            if(rs.next()){
+            if (rs.next()) {
                 //Se actualiza la bd local
                 updateTables(con, db, user);
             }
@@ -99,17 +99,17 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "Updater ran Db");
     }
 
-    private void updateTables(Connection con, SQLiteDatabase db, String user){
+    private void updateTables(Connection con, SQLiteDatabase db, String user) {
         try {
             Statement st = con.createStatement();
 
-            Log.d(TAG,String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user)+" Db");
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user) + " Db");
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user));
 
             // Iteramos sobre todos los componentes de timeline
             ContentValues values = new ContentValues();
 
-            while(rs.next()){
+            while (rs.next()) {
                 String nombreLista = rs.getString("nombreLista");
 
                 // Insertar en la base de datos
@@ -127,7 +127,7 @@ public class RefreshService extends IntentService {
         }
     }
 
-    private void updateLista(Connection con, SQLiteDatabase db, String idLista, String user){
+    private void updateLista(Connection con, SQLiteDatabase db, String idLista, String user) {
         try {
 
             Statement st = con.createStatement();
@@ -142,7 +142,7 @@ public class RefreshService extends IntentService {
             String nickUsuario = rs.getString("nickUsuario");
             int estado = rs.getInt("estado");
 
-            if(estado==1 || nickUsuario.equals(user)){
+            if (estado == 1 || nickUsuario.equals(user)) {
 
                 values.clear();
                 values.put(CarroCompraContract.ColumnListaCompra.ID, idLista);
@@ -159,7 +159,7 @@ public class RefreshService extends IntentService {
         }
     }
 
-    private void updateParticipaciones(Connection con, SQLiteDatabase db, String idLista, String user){
+    private void updateParticipaciones(Connection con, SQLiteDatabase db, String idLista, String user) {
         try {
 
             Statement st = con.createStatement();
@@ -172,7 +172,7 @@ public class RefreshService extends IntentService {
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.LISTA,
                     idLista, CarroCompraContract.ColumnParticipacion.USER, user));
 
-            while(rs.next()){
+            while (rs.next()) {
                 String nickUsuario = rs.getString("nickUsuario");
 
                 // Imprimimos las actualizaciones en el log
@@ -192,7 +192,7 @@ public class RefreshService extends IntentService {
         }
     }
 
-    private void updateElementos(Connection con, SQLiteDatabase db, String idLista){
+    private void updateElementos(Connection con, SQLiteDatabase db, String idLista) {
         try {
 
             Statement st = con.createStatement();
@@ -203,13 +203,12 @@ public class RefreshService extends IntentService {
 
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEELEMENTO, CarroCompraContract.ColumnElemento.IDLISTA, idLista));
 
-            while(rs.next()){
+            while (rs.next()) {
                 String nombre = rs.getString("nombre");
                 int cantidad = rs.getInt("cantidad");
                 float precioUnidad = rs.getFloat("precioUnidad");
                 int estado = rs.getInt("estado");
                 int eliminado = rs.getInt("eliminado");
-
 
 
                 values.clear();

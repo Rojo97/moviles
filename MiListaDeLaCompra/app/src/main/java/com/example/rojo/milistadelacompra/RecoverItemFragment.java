@@ -28,13 +28,13 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
     String listaNombre;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recover_item, container, false);
         boton = view.findViewById(R.id.recover_item_button);
         boton.setOnClickListener(this);
         items = view.findViewById(R.id.select_item_recover);
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             listaNombre = bundle.getString("LISTA_NOMBRE");
         }
         GetItems getListas = new GetItems(view, this.getActivity(), this);
@@ -50,14 +50,14 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
         new ConnectMySql(this.getView(), this.getActivity()).execute(nameItem);
     }
 
-    public void onTaskFinished(ArrayList<String> items){
-        if(items!=null){
+    public void onTaskFinished(ArrayList<String> items) {
+        if (items != null) {
             String[] nombreItems = new String[items.size()];
             nombreItems = items.toArray(nombreItems);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, nombreItems);
             this.items.setAdapter(adapter);
-            }
         }
+    }
 
     private class GetItems extends AsyncTask<String, Void, String> {
         private Context contexto;
@@ -65,7 +65,7 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
         ArrayList<String> nombreItems = new ArrayList<String>();
         RecoverItemFragment fragment;
 
-        public GetItems(View view, Context contexto, RecoverItemFragment fragment){
+        public GetItems(View view, Context contexto, RecoverItemFragment fragment) {
             this.view = view;
             this.contexto = contexto;
             this.fragment = fragment;
@@ -84,7 +84,7 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
             String res;
             try {
 
-                String where = CarroCompraContract.ColumnElemento.REMOVED +" = 1";
+                String where = CarroCompraContract.ColumnElemento.REMOVED + " = 1";
                 Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
                 Cursor c = getActivity().getContentResolver().query(uri, null, where, null, null);
 
@@ -120,7 +120,7 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
         private static final String user = "root";
         private static final String pass = "";
 
-        public ConnectMySql(View view, Context contexto){
+        public ConnectMySql(View view, Context contexto) {
             this.view = view;
             this.contexto = contexto;
         }
@@ -136,7 +136,7 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
         @Override
         protected String doInBackground(String... params) {
             String res;
-            Log.d(TAG, "Trying to insert "+ params[0]);
+            Log.d(TAG, "Trying to insert " + params[0]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
@@ -145,8 +145,8 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
                 String itemName = params[0];
 
                 Statement st = con.createStatement();
-                Log.e(TAG, "update Elemento set eliminado = 0 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
-                st.execute("update Elemento set eliminado = 0 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
+                Log.e(TAG, "update Elemento set eliminado = 0 where nombre = '" + itemName + "' and nombreLista = '" + listaNombre + "';");
+                st.execute("update Elemento set eliminado = 0 where nombre = '" + itemName + "' and nombreLista = '" + listaNombre + "';");
 
                 //Se actualiza en la bd local
                 ContentValues values = new ContentValues();

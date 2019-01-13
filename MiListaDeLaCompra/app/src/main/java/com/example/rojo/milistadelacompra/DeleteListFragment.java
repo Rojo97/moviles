@@ -33,7 +33,7 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
     private Spinner listas;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delete_list, container, false);
         boton = view.findViewById(R.id.delete_list_button);
         boton.setOnClickListener(this);
@@ -50,14 +50,15 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
         String nameList = listas.getSelectedItem().toString();
         new ConnectMySql(this.getView(), this.getActivity()).execute(nameList);
     }
-    public void onTaskFinished(ArrayList<String> listas){
-        if(listas!=null){
+
+    public void onTaskFinished(ArrayList<String> listas) {
+        if (listas != null) {
             String[] nombrelistas = new String[listas.size()];
             nombrelistas = listas.toArray(nombrelistas);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, nombrelistas);
             this.listas.setAdapter(adapter);
-            }
         }
+    }
 
     private class GetItems extends AsyncTask<String, Void, String> {
         private Context contexto;
@@ -66,7 +67,7 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
         ArrayList<String> nombreListas = new ArrayList<>();
         DeleteListFragment fragment;
 
-        public GetItems(View view, Context contexto, DeleteListFragment fragment){
+        public GetItems(View view, Context contexto, DeleteListFragment fragment) {
             this.view = view;
             this.contexto = contexto;
             this.fragment = fragment;
@@ -88,16 +89,16 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
                 String user = preferencias.getString("user", "");
 
                 String subSql = "select * from " + CarroCompraContract.TABLEPARTICIPACION + " where " + CarroCompraContract.ColumnParticipacion.LISTA + " = "
-                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '"+user+"'";
+                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
 
-                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1"+
-                        " and exists ( " + subSql +" )" ;
+                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1" +
+                        " and exists ( " + subSql + " )";
 
                 Cursor c = getActivity().getContentResolver().query(CarroCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
 
-                while(c.moveToNext()){
+                while (c.moveToNext()) {
                     nombreListas.add(c.getString(0));
                 }
 
@@ -128,7 +129,7 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
         private static final String user = "root";
         private static final String pass = "";
 
-        public ConnectMySql(View view, Context contexto){
+        public ConnectMySql(View view, Context contexto) {
             this.view = view;
             this.contexto = contexto;
         }
@@ -144,7 +145,7 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
         @Override
         protected String doInBackground(String... params) {
             String res;
-            Log.d(TAG, "Trying to insert "+ params[0]);
+            Log.d(TAG, "Trying to insert " + params[0]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
@@ -155,15 +156,15 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
                 String user = preferencias.getString("user", "");
 
                 Statement st = con.createStatement();
-                Log.e(TAG, "update ListaCompra set estado = 0 where nombre = '"+listName+"' ;");
-                st.execute("update ListaCompra set estado = 0 where nombre = '"+listName+"' ;");
+                Log.e(TAG, "update ListaCompra set estado = 0 where nombre = '" + listName + "' ;");
+                st.execute("update ListaCompra set estado = 0 where nombre = '" + listName + "' ;");
 
                 //Se actualiza en la bd local
                 ContentValues values = new ContentValues();
                 values.clear();
                 values.put(CarroCompraContract.ColumnListaCompra.STATUS, 0);
 
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName );
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName);
                 getActivity().getContentResolver().update(uri, values, null, null);
 
                 String result = getResources().getString(R.string.data_saved);

@@ -17,8 +17,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRestart()
-    {
+    public void onRestart() {
         super.onRestart();
         finish();
         startActivity(getIntent());

@@ -180,8 +180,8 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
                 }
 
 
-                //TODO Update en local y en remoto
-                String w = " where " + CarroCompraContract.ColumnElemento.IDLISTA + " = '"+ listaNombre +
+                //Update en local y en remoto
+                String w = " where " + CarroCompraContract.ColumnElemento.IDLISTA + " = '" + listaNombre +
                         "' and " + CarroCompraContract.ColumnElemento.ID + " = '" + itemName + "' ";
 
                 Log.e(TAG, sql + w + ";");

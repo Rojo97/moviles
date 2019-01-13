@@ -37,7 +37,7 @@
     <string name="share_list_text_fragment">Compartir la lista: </string>
     <string name="share_list_text_user">Usuario con quien compartir</string>
     <string name="share_lit_button_text">Compartir</string>
-    <string name="user_not_found">No se ha posido compartir con el usuario</string>
+    <string name="user_not_found">El usuario no existe</string>
     <string name="share_ok">Lista compartida con exito</string>
     <string name="delete_list_title">Eliminar lista</string>
     <string name="delete_list_name">Nombre de la lista</string>
@@ -57,4 +57,9 @@
     <string name="insert_element_quantity">Introduzca la cantidad del elelemto</string>
     <string name="insert_element_price">Introduzca el precio del elemento</string>
     <string name="reload">Recargar</string>
+    <string name="db_duplicate_participacion">Ese usuario ya participa en la lista</string>
+    <string name="insert_user_name">Introduzca el nombre de usuario</string>
+    <string name="insert_user_nick">Introduzca el nick de usuario</string>
+    <string name="insert_user_pass">Introduzca la contraseña</string>
+    <string name="insert_user_surname">Introduzca los dos apellidos de usuario</string>
 </resources>
