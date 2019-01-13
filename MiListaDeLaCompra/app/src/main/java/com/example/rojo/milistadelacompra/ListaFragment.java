@@ -2,6 +2,7 @@
 * Ismael Perez Martin*/
 package com.example.rojo.milistadelacompra;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -119,6 +120,17 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
                 Statement st = con.createStatement();
                 Log.e(TAG,"update Elemento set estado = "+ estado +" where nombre = '" +nombre+"' and  nombreLista = '"+listaNombre+"';");
                 st.execute("update Elemento set estado = "+ estado +" where nombre = '" +nombre+"' and  nombreLista = '"+listaNombre+"';");
+
+                //Se actualiza en la bd local
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(CarroCompraContract.ColumnElemento.STATUS, Integer.parseInt(estado));
+
+                String where = CarroCompraContract.ColumnElemento.ID + " = ? and " + CarroCompraContract.ColumnElemento.IDLISTA + " = ?";
+                String[] args = {nombre, listaNombre};
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + nombre);
+                getActivity().getContentResolver().update(uri, values, where, args);
+
                 String result = getResources().getString(R.string.data_charged);
 
                 res = result;

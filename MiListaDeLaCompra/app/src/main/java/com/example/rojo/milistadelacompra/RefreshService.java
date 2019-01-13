@@ -47,8 +47,9 @@ public class RefreshService extends IntentService {
             Log.d(TAG, "Updater running Db");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String user = prefs.getString("user", "");
+            String pass = prefs.getString("user_password", "");
             try {
-                updateDB(user);
+                updateDB(user, pass);
                 Thread.sleep(DELAY);
             } catch (InterruptedException e) {
                 runFlag = false;
@@ -65,7 +66,7 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "onDestroyed");
     }
 
-    private void updateDB(String user){
+    private void updateDB(String user, String pass){
         // Iteramos sobre todos los componentes de timeline
         db = dbHelper.getWritableDatabase();
 
@@ -75,8 +76,18 @@ public class RefreshService extends IntentService {
             System.out.println("Database conection success");
             Log.d(TAG, "Database conection success Db");
 
-            //Se actualiza la bd local
-            updateTables(con, db, user);
+            db.execSQL("delete from " + CarroCompraContract.TABLEPARTICIPACION);
+            db.execSQL("delete from " + CarroCompraContract.TABLELISTACOMPRA);
+            db.execSQL("delete from " + CarroCompraContract.TABLEELEMENTO);
+
+            Statement st = con.createStatement();
+            String sql = "select * from Usuario where nick = '" + user + "' and contrasenia = '" + pass + "';";
+            ResultSet rs = st.executeQuery(sql);
+
+            if(rs.next()){
+                //Se actualiza la bd local
+                updateTables(con, db, user);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,23 +99,12 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "Updater ran Db");
     }
 
-    /*private void updateDB(Intent intent){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String user = prefs.getString("user", "");
-
-        updateDB(user);
-    }*/
-
     private void updateTables(Connection con, SQLiteDatabase db, String user){
         try {
             Statement st = con.createStatement();
 
             Log.d(TAG,String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user)+" Db");
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user));
-
-            db.execSQL("delete from " + CarroCompraContract.TABLEPARTICIPACION);
-            db.execSQL("delete from " + CarroCompraContract.TABLELISTACOMPRA);
-            db.execSQL("delete from " + CarroCompraContract.TABLEELEMENTO);
 
             // Iteramos sobre todos los componentes de timeline
             ContentValues values = new ContentValues();

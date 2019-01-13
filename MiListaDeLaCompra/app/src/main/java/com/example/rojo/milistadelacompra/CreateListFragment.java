@@ -81,31 +81,39 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
                 System.out.println("Database conection success");
 
                 String listName = params[0];
-                SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
-                String user = preferencias.getString("user", "");
 
-                Statement st = con.createStatement();
-                Log.e(TAG, "insert into ListaCompra values ('"+listName+"', '"+ user + "', '"+1+");");
-                st.executeUpdate("insert into ListaCompra values ('"+listName+"', '"+ user + "', "+1+");");
-                st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
+                if(!listName.equals("")){
+                    SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
+                    String user = preferencias.getString("user", "");
+
+                    listName = listName.trim();
+
+                    Statement st = con.createStatement();
+                    Log.e(TAG, "insert into ListaCompra values ('"+listName+"', '"+ user + "', '"+1+");");
+                    st.executeUpdate("insert into ListaCompra values ('"+listName+"', '"+ user + "', "+1+");");
+                    st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
 
 
-                //Guardo los datos en la bd local
-                ContentValues values = new ContentValues();
-                values.clear();
-                values.put(CarroCompraContract.ColumnListaCompra.ID, listName);
-                values.put(CarroCompraContract.ColumnListaCompra.USER, user);
-                values.put(CarroCompraContract.ColumnListaCompra.STATUS, 1);
-                getActivity().getContentResolver().insert(CarroCompraContract.CONTENT_URI_LISTA, values);
+                    //Guardo los datos en la bd local
+                    ContentValues values = new ContentValues();
+                    values.clear();
+                    values.put(CarroCompraContract.ColumnListaCompra.ID, listName);
+                    values.put(CarroCompraContract.ColumnListaCompra.USER, user);
+                    values.put(CarroCompraContract.ColumnListaCompra.STATUS, 1);
+                    getActivity().getContentResolver().insert(CarroCompraContract.CONTENT_URI_LISTA, values);
 
-                values.clear();
-                values.put(CarroCompraContract.ColumnParticipacion.USER, user);
-                values.put(CarroCompraContract.ColumnParticipacion.LISTA, listName);
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName + "/Participantes");
-                getActivity().getContentResolver().insert(uri, values);
+                    values.clear();
+                    values.put(CarroCompraContract.ColumnParticipacion.USER, user);
+                    values.put(CarroCompraContract.ColumnParticipacion.LISTA, listName);
+                    Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName + "/Participantes");
+                    getActivity().getContentResolver().insert(uri, values);
 
-                String result = getResources().getString(R.string.data_saved);
-                res = result;
+                    String result = getResources().getString(R.string.data_saved);
+                    res = result;
+                }else{
+                    res = getResources().getString(R.string.insert_list_name);
+                }
+
 
             } catch (SQLException e) {
                 e.printStackTrace();
