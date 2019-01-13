@@ -84,13 +84,13 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
             try {
                 String user = preferencias.getString("user", "");
 
-                String subSql = "select * from " + CarroCompraContract.TABLEPARTICIPACION + " where " + CarroCompraContract.ColumnParticipacion.LISTA + " = "
-                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
+                String subSql = "select * from " + ListaCompraContract.TABLEPARTICIPACION + " where " + ListaCompraContract.ColumnParticipacion.LISTA + " = "
+                        + ListaCompraContract.ColumnListaCompra.ID + " and " + ListaCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
 
-                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 0" +
+                String sql = ListaCompraContract.ColumnListaCompra.STATUS + " = 0" +
                         " and exists ( " + subSql + " )";
 
-                Cursor c = getActivity().getContentResolver().query(CarroCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
+                Cursor c = getActivity().getContentResolver().query(ListaCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
 
@@ -158,9 +158,9 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
                 //Se actualiza en la bd local
                 ContentValues values = new ContentValues();
                 values.clear();
-                values.put(CarroCompraContract.ColumnListaCompra.STATUS, 1);
+                values.put(ListaCompraContract.ColumnListaCompra.STATUS, 1);
 
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName);
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listName);
                 getActivity().getContentResolver().update(uri, values, null, null);
 
                 String result = getResources().getString(R.string.data_saved);

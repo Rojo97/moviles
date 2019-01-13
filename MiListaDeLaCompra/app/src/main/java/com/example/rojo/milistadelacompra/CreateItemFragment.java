@@ -104,13 +104,13 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
                             //Guardo el elemento en la bd local
                             ContentValues values = new ContentValues();
                             values.clear();
-                            values.put(CarroCompraContract.ColumnElemento.ID, name);
-                            values.put(CarroCompraContract.ColumnElemento.QUANTITY, cantidad);
-                            values.put(CarroCompraContract.ColumnElemento.PRICE, prize);
-                            values.put(CarroCompraContract.ColumnElemento.IDLISTA, lista);
-                            values.put(CarroCompraContract.ColumnElemento.STATUS, 0);
-                            values.put(CarroCompraContract.ColumnElemento.REMOVED, 0);
-                            Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + lista + "/Elementos");
+                            values.put(ListaCompraContract.ColumnElemento.ID, name);
+                            values.put(ListaCompraContract.ColumnElemento.QUANTITY, cantidad);
+                            values.put(ListaCompraContract.ColumnElemento.PRICE, prize);
+                            values.put(ListaCompraContract.ColumnElemento.IDLISTA, lista);
+                            values.put(ListaCompraContract.ColumnElemento.STATUS, 0);
+                            values.put(ListaCompraContract.ColumnElemento.REMOVED, 0);
+                            Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + lista + "/Elementos");
                             getActivity().getContentResolver().insert(uri, values);
 
                             String result = getResources().getString(R.string.data_saved);

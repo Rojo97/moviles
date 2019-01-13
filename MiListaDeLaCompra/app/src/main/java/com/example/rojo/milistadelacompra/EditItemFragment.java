@@ -92,8 +92,8 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
             String res;
             try {
 
-                String where = CarroCompraContract.ColumnElemento.REMOVED + " = 0";
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
+                String where = ListaCompraContract.ColumnElemento.REMOVED + " = 0";
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
                 Cursor c = getActivity().getContentResolver().query(uri, null, where, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
@@ -159,8 +159,8 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
                 ContentValues values = new ContentValues();
                 values.clear();
 
-                String updateCantidad = CarroCompraContract.ColumnElemento.QUANTITY + " = " + quantity;
-                String updatePrecio = CarroCompraContract.ColumnElemento.PRICE + " = " + prize;
+                String updateCantidad = ListaCompraContract.ColumnElemento.QUANTITY + " = " + quantity;
+                String updatePrecio = ListaCompraContract.ColumnElemento.PRICE + " = " + prize;
                 String sql = "update Elemento set ";
 
                 if (quantity.equals("") && prize.equals("")) {
@@ -168,29 +168,29 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
                 } else if (quantity.equals("") || prize.equals("")) {
                     if (quantity.equals("")) {
                         sql = sql + updatePrecio;
-                        values.put(CarroCompraContract.ColumnElemento.PRICE, prize);
+                        values.put(ListaCompraContract.ColumnElemento.PRICE, prize);
                     } else {
                         sql = sql + updateCantidad;
-                        values.put(CarroCompraContract.ColumnElemento.QUANTITY, quantity);
+                        values.put(ListaCompraContract.ColumnElemento.QUANTITY, quantity);
                     }
                 } else {
                     sql = sql + updateCantidad + " and " + updatePrecio;
-                    values.put(CarroCompraContract.ColumnElemento.PRICE, prize);
-                    values.put(CarroCompraContract.ColumnElemento.QUANTITY, quantity);
+                    values.put(ListaCompraContract.ColumnElemento.PRICE, prize);
+                    values.put(ListaCompraContract.ColumnElemento.QUANTITY, quantity);
                 }
 
 
                 //Update en local y en remoto
-                String w = " where " + CarroCompraContract.ColumnElemento.IDLISTA + " = '" + listaNombre +
-                        "' and " + CarroCompraContract.ColumnElemento.ID + " = '" + itemName + "' ";
+                String w = " where " + ListaCompraContract.ColumnElemento.IDLISTA + " = '" + listaNombre +
+                        "' and " + ListaCompraContract.ColumnElemento.ID + " = '" + itemName + "' ";
 
                 Log.e(TAG, sql + w + ";");
                 st.execute(sql + w + ";");
 
                 //Se actualiza en la bd local
-                String where = CarroCompraContract.ColumnElemento.ID + " = ? and " + CarroCompraContract.ColumnElemento.IDLISTA + " = ?";
+                String where = ListaCompraContract.ColumnElemento.ID + " = ? and " + ListaCompraContract.ColumnElemento.IDLISTA + " = ?";
                 String[] args = {itemName, listaNombre};
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + itemName);
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + itemName);
                 getActivity().getContentResolver().update(uri, values, where, args);
 
                 String result = getResources().getString(R.string.data_saved);

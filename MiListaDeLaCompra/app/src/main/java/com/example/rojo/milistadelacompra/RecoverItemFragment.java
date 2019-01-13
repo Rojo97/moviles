@@ -84,8 +84,8 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
             String res;
             try {
 
-                String where = CarroCompraContract.ColumnElemento.REMOVED + " = 1";
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
+                String where = ListaCompraContract.ColumnElemento.REMOVED + " = 1";
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
                 Cursor c = getActivity().getContentResolver().query(uri, null, where, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
@@ -151,11 +151,11 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
                 //Se actualiza en la bd local
                 ContentValues values = new ContentValues();
                 values.clear();
-                values.put(CarroCompraContract.ColumnElemento.REMOVED, 0);
+                values.put(ListaCompraContract.ColumnElemento.REMOVED, 0);
 
-                String where = CarroCompraContract.ColumnElemento.ID + " = ? and " + CarroCompraContract.ColumnElemento.IDLISTA + " = ?";
+                String where = ListaCompraContract.ColumnElemento.ID + " = ? and " + ListaCompraContract.ColumnElemento.IDLISTA + " = ?";
                 String[] args = {itemName, listaNombre};
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + itemName);
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + itemName);
                 getActivity().getContentResolver().update(uri, values, where, args);
 
                 String result = getResources().getString(R.string.data_saved);

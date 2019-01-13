@@ -5,7 +5,7 @@ package com.example.rojo.milistadelacompra;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class CarroCompraContract {
+public class ListaCompraContract {
     public static final String REMOTEURL = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
     public static final String REMOTEUSER = "root";
     public static final String REMOTEPASS = "";
@@ -22,8 +22,8 @@ public class CarroCompraContract {
     public static final String DEFAULT_SORT_ELEMENTO = ColumnElemento.STATUS + " ASC";
 
     // Constantes del content provider
-    // content://com.example.rojo.milistadelacompra.CarroCompraProvider/status
-    public static final String AUTHORITY = "com.example.rojo.milistadelacompra.CarroCompraProvider";
+    // content://com.example.rojo.milistadelacompra.ListaCompraProvider/status
+    public static final String AUTHORITY = "com.example.rojo.milistadelacompra.ListaCompraProvider";
     public static final Uri CONTENT_URI_LISTA = Uri.parse("content://" + AUTHORITY + "/" + TABLELISTACOMPRA);
     public static final Uri CONTENT_URI_PARTICIPACION = Uri.parse("content://" + AUTHORITY + "/" + TABLEPARTICIPACION);
     public static final Uri CONTENT_URI_ELEMENTO = Uri.parse("content://" + AUTHORITY + "/" + TABLEELEMENTO);

@@ -15,15 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -88,13 +84,13 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
             try {
                 String user = preferencias.getString("user", "");
 
-                String subSql = "select * from " + CarroCompraContract.TABLEPARTICIPACION + " where " + CarroCompraContract.ColumnParticipacion.LISTA + " = "
-                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
+                String subSql = "select * from " + ListaCompraContract.TABLEPARTICIPACION + " where " + ListaCompraContract.ColumnParticipacion.LISTA + " = "
+                        + ListaCompraContract.ColumnListaCompra.ID + " and " + ListaCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
 
-                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1" +
+                String sql = ListaCompraContract.ColumnListaCompra.STATUS + " = 1" +
                         " and exists ( " + subSql + " )";
 
-                Cursor c = getActivity().getContentResolver().query(CarroCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
+                Cursor c = getActivity().getContentResolver().query(ListaCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
 
@@ -162,9 +158,9 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
                 //Se actualiza en la bd local
                 ContentValues values = new ContentValues();
                 values.clear();
-                values.put(CarroCompraContract.ColumnListaCompra.STATUS, 0);
+                values.put(ListaCompraContract.ColumnListaCompra.STATUS, 0);
 
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName);
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listName);
                 getActivity().getContentResolver().update(uri, values, null, null);
 
                 String result = getResources().getString(R.string.data_saved);

@@ -96,13 +96,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 String user = prefs.getString("user", "");
 
-                String subSql = "select * from " + CarroCompraContract.TABLEPARTICIPACION + " where " + CarroCompraContract.ColumnParticipacion.LISTA + " = "
-                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
+                String subSql = "select * from " + ListaCompraContract.TABLEPARTICIPACION + " where " + ListaCompraContract.ColumnParticipacion.LISTA + " = "
+                        + ListaCompraContract.ColumnListaCompra.ID + " and " + ListaCompraContract.ColumnParticipacion.USER + " = '" + user + "'";
 
-                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1" +
+                String sql = ListaCompraContract.ColumnListaCompra.STATUS + " = 1" +
                         " and exists ( " + subSql + " )";
 
-                Cursor c = getActivity().getContentResolver().query(CarroCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
+                Cursor c = getActivity().getContentResolver().query(ListaCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
                 listas = new ArrayList<String>();

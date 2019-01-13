@@ -72,13 +72,13 @@ public class RefreshService extends IntentService {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(CarroCompraContract.REMOTEURL, CarroCompraContract.REMOTEUSER, CarroCompraContract.REMOTEPASS);
+            Connection con = DriverManager.getConnection(ListaCompraContract.REMOTEURL, ListaCompraContract.REMOTEUSER, ListaCompraContract.REMOTEPASS);
             System.out.println("Database conection success");
             Log.d(TAG, "Database conection success Db");
 
-            db.execSQL("delete from " + CarroCompraContract.TABLEPARTICIPACION);
-            db.execSQL("delete from " + CarroCompraContract.TABLELISTACOMPRA);
-            db.execSQL("delete from " + CarroCompraContract.TABLEELEMENTO);
+            db.execSQL("delete from " + ListaCompraContract.TABLEPARTICIPACION);
+            db.execSQL("delete from " + ListaCompraContract.TABLELISTACOMPRA);
+            db.execSQL("delete from " + ListaCompraContract.TABLEELEMENTO);
 
             Statement st = con.createStatement();
             String sql = "select * from Usuario where nick = '" + user + "' and contrasenia = '" + pass + "';";
@@ -103,8 +103,8 @@ public class RefreshService extends IntentService {
         try {
             Statement st = con.createStatement();
 
-            Log.d(TAG, String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user) + " Db");
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user));
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.USER, user) + " Db");
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.USER, user));
 
             // Iteramos sobre todos los componentes de timeline
             ContentValues values = new ContentValues();
@@ -114,9 +114,9 @@ public class RefreshService extends IntentService {
 
                 // Insertar en la base de datos
                 values.clear();
-                values.put(CarroCompraContract.ColumnParticipacion.USER, user);
-                values.put(CarroCompraContract.ColumnParticipacion.LISTA, nombreLista);
-                db.insertWithOnConflict(CarroCompraContract.TABLEPARTICIPACION, null, values,
+                values.put(ListaCompraContract.ColumnParticipacion.USER, user);
+                values.put(ListaCompraContract.ColumnParticipacion.LISTA, nombreLista);
+                db.insertWithOnConflict(ListaCompraContract.TABLEPARTICIPACION, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
 
                 updateLista(con, db, nombreLista, user);
@@ -132,10 +132,10 @@ public class RefreshService extends IntentService {
 
             Statement st = con.createStatement();
 
-            Log.d(TAG, String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLELISTACOMPRA, CarroCompraContract.ColumnListaCompra.ID, idLista) + " Db");
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLELISTACOMPRA, ListaCompraContract.ColumnListaCompra.ID, idLista) + " Db");
             ContentValues values = new ContentValues();
 
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLELISTACOMPRA, CarroCompraContract.ColumnListaCompra.ID, idLista));
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLELISTACOMPRA, ListaCompraContract.ColumnListaCompra.ID, idLista));
 
             //Se coge el primer elemento del ResultSet
             rs.next();
@@ -145,10 +145,10 @@ public class RefreshService extends IntentService {
             if (estado == 1 || nickUsuario.equals(user)) {
 
                 values.clear();
-                values.put(CarroCompraContract.ColumnListaCompra.ID, idLista);
-                values.put(CarroCompraContract.ColumnListaCompra.USER, nickUsuario);
-                values.put(CarroCompraContract.ColumnListaCompra.STATUS, estado);
-                db.insertWithOnConflict(CarroCompraContract.TABLELISTACOMPRA, null, values,
+                values.put(ListaCompraContract.ColumnListaCompra.ID, idLista);
+                values.put(ListaCompraContract.ColumnListaCompra.USER, nickUsuario);
+                values.put(ListaCompraContract.ColumnListaCompra.STATUS, estado);
+                db.insertWithOnConflict(ListaCompraContract.TABLELISTACOMPRA, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
 
                 updateParticipaciones(con, db, idLista, user);
@@ -164,13 +164,13 @@ public class RefreshService extends IntentService {
 
             Statement st = con.createStatement();
 
-            Log.d(TAG, String.format("select * from %s where %s = '%s' and %s <> '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.LISTA,
-                    idLista, CarroCompraContract.ColumnParticipacion.USER, user) + " Db");
+            Log.d(TAG, String.format("select * from %s where %s = '%s' and %s <> '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.LISTA,
+                    idLista, ListaCompraContract.ColumnParticipacion.USER, user) + " Db");
             ContentValues values = new ContentValues();
 
             //Saca los participantes de la lista distintos a user
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.LISTA,
-                    idLista, CarroCompraContract.ColumnParticipacion.USER, user));
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.LISTA,
+                    idLista, ListaCompraContract.ColumnParticipacion.USER, user));
 
             while (rs.next()) {
                 String nickUsuario = rs.getString("nickUsuario");
@@ -180,9 +180,9 @@ public class RefreshService extends IntentService {
                 // Insertar en la base de datos
 
                 values.clear();
-                values.put(CarroCompraContract.ColumnParticipacion.USER, nickUsuario);
-                values.put(CarroCompraContract.ColumnParticipacion.LISTA, idLista);
-                db.insertWithOnConflict(CarroCompraContract.TABLEPARTICIPACION, null, values,
+                values.put(ListaCompraContract.ColumnParticipacion.USER, nickUsuario);
+                values.put(ListaCompraContract.ColumnParticipacion.LISTA, idLista);
+                db.insertWithOnConflict(ListaCompraContract.TABLEPARTICIPACION, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
             }
 
@@ -197,11 +197,11 @@ public class RefreshService extends IntentService {
 
             Statement st = con.createStatement();
 
-            Log.d(TAG, String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEELEMENTO, CarroCompraContract.ColumnElemento.IDLISTA, idLista) + " Db");
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEELEMENTO, ListaCompraContract.ColumnElemento.IDLISTA, idLista) + " Db");
 
             ContentValues values = new ContentValues();
 
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEELEMENTO, CarroCompraContract.ColumnElemento.IDLISTA, idLista));
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEELEMENTO, ListaCompraContract.ColumnElemento.IDLISTA, idLista));
 
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
@@ -212,13 +212,13 @@ public class RefreshService extends IntentService {
 
 
                 values.clear();
-                values.put(CarroCompraContract.ColumnElemento.ID, nombre);
-                values.put(CarroCompraContract.ColumnElemento.QUANTITY, cantidad);
-                values.put(CarroCompraContract.ColumnElemento.PRICE, precioUnidad);
-                values.put(CarroCompraContract.ColumnElemento.IDLISTA, idLista);
-                values.put(CarroCompraContract.ColumnElemento.STATUS, estado);
-                values.put(CarroCompraContract.ColumnElemento.REMOVED, eliminado);
-                db.insertWithOnConflict(CarroCompraContract.TABLEELEMENTO, null, values,
+                values.put(ListaCompraContract.ColumnElemento.ID, nombre);
+                values.put(ListaCompraContract.ColumnElemento.QUANTITY, cantidad);
+                values.put(ListaCompraContract.ColumnElemento.PRICE, precioUnidad);
+                values.put(ListaCompraContract.ColumnElemento.IDLISTA, idLista);
+                values.put(ListaCompraContract.ColumnElemento.STATUS, estado);
+                values.put(ListaCompraContract.ColumnElemento.REMOVED, eliminado);
+                db.insertWithOnConflict(ListaCompraContract.TABLEELEMENTO, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
             }
 

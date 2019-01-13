@@ -97,15 +97,15 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
                     //Guardo los datos en la bd local
                     ContentValues values = new ContentValues();
                     values.clear();
-                    values.put(CarroCompraContract.ColumnListaCompra.ID, listName);
-                    values.put(CarroCompraContract.ColumnListaCompra.USER, user);
-                    values.put(CarroCompraContract.ColumnListaCompra.STATUS, 1);
-                    getActivity().getContentResolver().insert(CarroCompraContract.CONTENT_URI_LISTA, values);
+                    values.put(ListaCompraContract.ColumnListaCompra.ID, listName);
+                    values.put(ListaCompraContract.ColumnListaCompra.USER, user);
+                    values.put(ListaCompraContract.ColumnListaCompra.STATUS, 1);
+                    getActivity().getContentResolver().insert(ListaCompraContract.CONTENT_URI_LISTA, values);
 
                     values.clear();
-                    values.put(CarroCompraContract.ColumnParticipacion.USER, user);
-                    values.put(CarroCompraContract.ColumnParticipacion.LISTA, listName);
-                    Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName + "/Participantes");
+                    values.put(ListaCompraContract.ColumnParticipacion.USER, user);
+                    values.put(ListaCompraContract.ColumnParticipacion.LISTA, listName);
+                    Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listName + "/Participantes");
                     getActivity().getContentResolver().insert(uri, values);
 
                     String result = getResources().getString(R.string.data_saved);

@@ -20,8 +20,6 @@ import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -124,11 +122,11 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
                 //Se actualiza en la bd local
                 ContentValues values = new ContentValues();
                 values.clear();
-                values.put(CarroCompraContract.ColumnElemento.STATUS, Integer.parseInt(estado));
+                values.put(ListaCompraContract.ColumnElemento.STATUS, Integer.parseInt(estado));
 
-                String where = CarroCompraContract.ColumnElemento.ID + " = ? and " + CarroCompraContract.ColumnElemento.IDLISTA + " = ?";
+                String where = ListaCompraContract.ColumnElemento.ID + " = ? and " + ListaCompraContract.ColumnElemento.IDLISTA + " = ?";
                 String[] args = {nombre, listaNombre};
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + nombre);
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + nombre);
                 getActivity().getContentResolver().update(uri, values, where, args);
 
                 String result = getResources().getString(R.string.data_charged);
@@ -180,8 +178,8 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         protected String doInBackground(String... params) {
             try {
 
-                String where = CarroCompraContract.ColumnElemento.REMOVED + " = 0";
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
+                String where = ListaCompraContract.ColumnElemento.REMOVED + " = 0";
+                Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
                 Cursor c = getActivity().getContentResolver().query(uri, null, where, null, null);
 
                 String result = getResources().getString(R.string.data_charged);

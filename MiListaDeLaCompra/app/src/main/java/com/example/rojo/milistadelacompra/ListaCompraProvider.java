@@ -14,24 +14,24 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class CarroCompraProvider extends ContentProvider {
+public class ListaCompraProvider extends ContentProvider {
 
-    private static final String TAG = CarroCompraProvider.class.getSimpleName();
+    private static final String TAG = ListaCompraProvider.class.getSimpleName();
     private DbHelper dbHelper;
     private static final UriMatcher sURIMatcher;
 
     static {
         sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA, CarroCompraContract.STATUS_DIR_LISTA);
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*", CarroCompraContract.STATUS_ITEM_LISTA);
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.STATUS_DIR_PARTICIPACION);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLELISTACOMPRA, ListaCompraContract.STATUS_DIR_LISTA);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLELISTACOMPRA + "/*", ListaCompraContract.STATUS_ITEM_LISTA);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.STATUS_DIR_PARTICIPACION);
 
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Participantes", CarroCompraContract.STATUS_DIR_PARTICIPACION_LISTA);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLELISTACOMPRA + "/*/Participantes", ListaCompraContract.STATUS_DIR_PARTICIPACION_LISTA);
         //En la ruta de la Uri el primer * se refiere al nombre de la ListaCompra y el segundo * al nombre del Usuario
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Participantes/*", CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA);
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLEELEMENTO, CarroCompraContract.STATUS_DIR_ELEMENTO);
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Elementos", CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA);
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Elementos/*", CarroCompraContract.STATUS_ITEM_ELEMENTO_LISTA);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLELISTACOMPRA + "/*/Participantes/*", ListaCompraContract.STATUS_ITEM_PARTICIPACION_LISTA);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLEELEMENTO, ListaCompraContract.STATUS_DIR_ELEMENTO);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLELISTACOMPRA + "/*/Elementos", ListaCompraContract.STATUS_DIR_ELEMENTO_LISTA);
+        sURIMatcher.addURI(ListaCompraContract.AUTHORITY, ListaCompraContract.TABLELISTACOMPRA + "/*/Elementos/*", ListaCompraContract.STATUS_ITEM_ELEMENTO_LISTA);
     }
 
     @Override
@@ -51,55 +51,55 @@ public class CarroCompraProvider extends ContentProvider {
         String nombreLista;
         String nombreElemento;
         switch (sURIMatcher.match(uri)) {
-            case CarroCompraContract.STATUS_DIR_LISTA:
+            case ListaCompraContract.STATUS_DIR_LISTA:
                 where = selection;
-                table = CarroCompraContract.TABLELISTACOMPRA;
-                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_LISTA : sortOrder;
+                table = ListaCompraContract.TABLELISTACOMPRA;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? ListaCompraContract.DEFAULT_SORT_LISTA : sortOrder;
                 break;
-            case CarroCompraContract.STATUS_ITEM_LISTA:
+            case ListaCompraContract.STATUS_ITEM_LISTA:
                 id = uri.getLastPathSegment();
-                where = CarroCompraContract.ColumnListaCompra.ID
+                where = ListaCompraContract.ColumnListaCompra.ID
                         + "= '"
                         + id
                         + "' "
                         + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                table = CarroCompraContract.TABLELISTACOMPRA;
+                table = ListaCompraContract.TABLELISTACOMPRA;
                 break;
-            case CarroCompraContract.STATUS_DIR_PARTICIPACION:
+            case ListaCompraContract.STATUS_DIR_PARTICIPACION:
                 where = selection;
-                table = CarroCompraContract.TABLEPARTICIPACION;
-                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_PARTICIPACION : sortOrder;
+                table = ListaCompraContract.TABLEPARTICIPACION;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? ListaCompraContract.DEFAULT_SORT_PARTICIPACION : sortOrder;
                 break;
-            case CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA:
+            case ListaCompraContract.STATUS_ITEM_PARTICIPACION_LISTA:
                 String nombreUser = uri.getLastPathSegment();
                 nombreLista = uri.getPathSegments().get(1);
 
-                where = CarroCompraContract.ColumnParticipacion.LISTA
+                where = ListaCompraContract.ColumnParticipacion.LISTA
                         + "= '"
                         + nombreLista
                         + "' and "
-                        + CarroCompraContract.ColumnParticipacion.USER
+                        + ListaCompraContract.ColumnParticipacion.USER
                         + "= '"
                         + nombreUser
                         + "' "
                         + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                table = CarroCompraContract.TABLEPARTICIPACION;
+                table = ListaCompraContract.TABLEPARTICIPACION;
                 break;
-            case CarroCompraContract.STATUS_DIR_ELEMENTO:
+            case ListaCompraContract.STATUS_DIR_ELEMENTO:
                 where = selection;
-                table = CarroCompraContract.TABLEELEMENTO;
-                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
+                table = ListaCompraContract.TABLEELEMENTO;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? ListaCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
                 break;
-            case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
+            case ListaCompraContract.STATUS_DIR_ELEMENTO_LISTA:
                 nombreLista = uri.getPathSegments().get(1);
 
-                where = CarroCompraContract.ColumnElemento.IDLISTA
+                where = ListaCompraContract.ColumnElemento.IDLISTA
                         + "= '"
                         + nombreLista
                         + "' "
                         + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                table = CarroCompraContract.TABLEELEMENTO;
-                orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
+                table = ListaCompraContract.TABLEELEMENTO;
+                orderBy = (TextUtils.isEmpty(sortOrder)) ? ListaCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
                 break;
 
             default:
@@ -118,23 +118,23 @@ public class CarroCompraProvider extends ContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
         switch (sURIMatcher.match(uri)) {
-            case CarroCompraContract.STATUS_DIR_LISTA:
+            case ListaCompraContract.STATUS_DIR_LISTA:
                 Log.d(TAG, "gotType: vnd.android.listacompra.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
                 return "vnd.android.listacompra.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
-            case CarroCompraContract.STATUS_ITEM_LISTA:
+            case ListaCompraContract.STATUS_ITEM_LISTA:
                 Log.d(TAG, "gotType: vnd.android.listacompra.item/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
                 return
                         "vnd.android.listacompra.item/vnd.com.example.rojo.milistadelacompra.provider.status";
-            case CarroCompraContract.STATUS_DIR_PARTICIPACION:
+            case ListaCompraContract.STATUS_DIR_PARTICIPACION:
                 Log.d(TAG, "gotType: vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
                 return "vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
-            case CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA:
+            case ListaCompraContract.STATUS_ITEM_PARTICIPACION_LISTA:
                 Log.d(TAG, "gotType: vnd.android.listacompra.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
                 return "vnd.android.listacompra.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
-            case CarroCompraContract.STATUS_DIR_ELEMENTO:
+            case ListaCompraContract.STATUS_DIR_ELEMENTO:
                 Log.d(TAG, "gotType: vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
                 return "vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
-            case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
+            case ListaCompraContract.STATUS_DIR_ELEMENTO_LISTA:
                 Log.d(TAG, "gotType: vnd.android.listacompra.elemento.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
                 return "vnd.android.listacompra.elemento.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
             default:
@@ -149,14 +149,14 @@ public class CarroCompraProvider extends ContentProvider {
         String table;
 
         switch (sURIMatcher.match(uri)) {
-            case CarroCompraContract.STATUS_DIR_LISTA:
-                table = CarroCompraContract.TABLELISTACOMPRA;
+            case ListaCompraContract.STATUS_DIR_LISTA:
+                table = ListaCompraContract.TABLELISTACOMPRA;
                 break;
-            case CarroCompraContract.STATUS_DIR_PARTICIPACION_LISTA:
-                table = CarroCompraContract.TABLEPARTICIPACION;
+            case ListaCompraContract.STATUS_DIR_PARTICIPACION_LISTA:
+                table = ListaCompraContract.TABLEPARTICIPACION;
                 break;
-            case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
-                table = CarroCompraContract.TABLEELEMENTO;
+            case ListaCompraContract.STATUS_DIR_ELEMENTO_LISTA:
+                table = ListaCompraContract.TABLEELEMENTO;
                 break;
             default:
                 throw new IllegalArgumentException("uri incorrecta: " + uri);
@@ -176,12 +176,12 @@ public class CarroCompraProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         String where;
         switch (sURIMatcher.match(uri)) {
-            case CarroCompraContract.STATUS_DIR_LISTA:
+            case ListaCompraContract.STATUS_DIR_LISTA:
                 where = s;
                 break;
-            case CarroCompraContract.STATUS_ITEM_LISTA:
+            case ListaCompraContract.STATUS_ITEM_LISTA:
                 long id = ContentUris.parseId(uri);
-                where = CarroCompraContract.ColumnListaCompra.ID
+                where = ListaCompraContract.ColumnListaCompra.ID
                         + "="
                         + id
                         + (TextUtils.isEmpty(s) ? "" : " and ( " + s + " )");
@@ -190,7 +190,7 @@ public class CarroCompraProvider extends ContentProvider {
                 throw new IllegalArgumentException("uri incorrecta: " + uri);
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int ret = db.delete(CarroCompraContract.TABLE, where, strings);
+        int ret = db.delete(ListaCompraContract.TABLE, where, strings);
         if (ret > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -205,28 +205,28 @@ public class CarroCompraProvider extends ContentProvider {
         String id;
         String nombreLista;
         switch (sURIMatcher.match(uri)) {
-            case CarroCompraContract.STATUS_DIR_LISTA:
+            case ListaCompraContract.STATUS_DIR_LISTA:
                 where = selection;
-                table = CarroCompraContract.TABLELISTACOMPRA;
+                table = ListaCompraContract.TABLELISTACOMPRA;
                 break;
-            case CarroCompraContract.STATUS_ITEM_LISTA:
+            case ListaCompraContract.STATUS_ITEM_LISTA:
                 id = uri.getLastPathSegment();
-                where = CarroCompraContract.ColumnListaCompra.ID
+                where = ListaCompraContract.ColumnListaCompra.ID
                         + "= '"
                         + id
                         + "' "
                         + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                table = CarroCompraContract.TABLELISTACOMPRA;
+                table = ListaCompraContract.TABLELISTACOMPRA;
                 break;
-            case CarroCompraContract.STATUS_ITEM_ELEMENTO_LISTA:
+            case ListaCompraContract.STATUS_ITEM_ELEMENTO_LISTA:
                 nombreLista = uri.getPathSegments().get(1);
 
-                where = CarroCompraContract.ColumnElemento.IDLISTA
+                where = ListaCompraContract.ColumnElemento.IDLISTA
                         + "= '"
                         + nombreLista
                         + "' "
                         + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
-                table = CarroCompraContract.TABLEELEMENTO;
+                table = ListaCompraContract.TABLEELEMENTO;
                 break;
             default:
                 throw new IllegalArgumentException("uri incorrecta: " + uri);

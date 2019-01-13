@@ -3,11 +3,9 @@ package com.example.rojo.milistadelacompra;
 import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import android.widget.Toast;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -108,9 +105,9 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
                         //Guardo el elemento en la bd local
                         ContentValues values = new ContentValues();
                         values.clear();
-                        values.put(CarroCompraContract.ColumnParticipacion.USER, user);
-                        values.put(CarroCompraContract.ColumnParticipacion.LISTA, lista);
-                        Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + lista + "/Participantes");
+                        values.put(ListaCompraContract.ColumnParticipacion.USER, user);
+                        values.put(ListaCompraContract.ColumnParticipacion.LISTA, lista);
+                        Uri uri = Uri.parse(ListaCompraContract.CONTENT_URI_LISTA + "/" + lista + "/Participantes");
                         getActivity().getContentResolver().insert(uri, values);
 
                         result = getResources().getString(R.string.share_ok);
