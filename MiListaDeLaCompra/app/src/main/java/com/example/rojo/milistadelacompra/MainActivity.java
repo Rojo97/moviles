@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.reload:
+                finish();
+                startActivity(getIntent());
+                return true;
             case R.id.delete_list:
                 startActivity(new Intent(this, DeleteListActivity.class));
                 return true;

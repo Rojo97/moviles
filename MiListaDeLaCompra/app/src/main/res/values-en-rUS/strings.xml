@@ -52,4 +52,5 @@
     <string name="edit_item">Edit element</string>
     <string name="edit_item_button_text">Edit</string>
     <string name="insert_something">Insert some parameter</string>
+    <string name="reload">Reload</string>
 </resources>
