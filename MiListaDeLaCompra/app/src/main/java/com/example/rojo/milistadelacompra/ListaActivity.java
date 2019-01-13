@@ -42,6 +42,10 @@ public class ListaActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.reload:
+                finish();
+                startActivity(getIntent());
+                return true;
             case R.id.add_element:
                 Intent intentAdd = new Intent(this, CreateItemActivity.class);
                 intentAdd.putExtras(this.getIntent().getExtras());

@@ -56,4 +56,5 @@
     <string name="insert_element_name">Introduzca el nombre del elemento</string>
     <string name="insert_element_quantity">Introduzca la cantidad del elelemto</string>
     <string name="insert_element_price">Introduzca el precio del elemento</string>
+    <string name="reload">Recargar</string>
 </resources>

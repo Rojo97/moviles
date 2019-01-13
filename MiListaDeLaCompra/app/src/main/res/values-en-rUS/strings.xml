@@ -56,4 +56,5 @@
     <string name="insert_element_name">Insert element name</string>
     <string name="insert_element_quantity">Insert element quantity</string>
     <string name="insert_element_price">Insert element price</string>
+    <string name="reload">Reload</string>
 </resources>
