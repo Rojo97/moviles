@@ -90,16 +90,11 @@ public class CarroCompraProvider extends ContentProvider {
                     orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
                     break;
                 case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
-                    nombreElemento = uri.getLastPathSegment();
                     nombreLista = uri.getPathSegments().get(1);
 
                     where = CarroCompraContract.ColumnElemento.IDLISTA
                             + "= '"
                             + nombreLista
-                            + "' and "
-                            + CarroCompraContract.ColumnElemento.ID
-                            + "= '"
-                            + nombreElemento
                             + "' "
                             + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
                     table = CarroCompraContract.TABLEELEMENTO;
@@ -122,12 +117,24 @@ public class CarroCompraProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         switch (sURIMatcher.match(uri)) {
             case CarroCompraContract.STATUS_DIR_LISTA:
-                Log.d(TAG, "gotType: vnd.android.cursor.dir/vnd.com.example.rojo.milistadelacompra.provider.status");
-                return "vnd.android.cursor.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
+                Log.d(TAG, "gotType: vnd.android.listacompra.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
+                return "vnd.android.listacompra.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
             case CarroCompraContract.STATUS_ITEM_LISTA:
-                Log.d(TAG, "gotType: vnd.android.cursor.item/vnd.com.example.rojo.milistadelacompra.provider.status");
+                Log.d(TAG, "gotType: vnd.android.listacompra.item/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
                 return
-                        "vnd.android.cursor.item/vnd.com.example.rojo.milistadelacompra.provider.status";
+                        "vnd.android.listacompra.item/vnd.com.example.rojo.milistadelacompra.provider.status";
+            case CarroCompraContract.STATUS_DIR_PARTICIPACION:
+                Log.d(TAG, "gotType: vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
+                return "vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
+            case CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA:
+                Log.d(TAG, "gotType: vnd.android.listacompra.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
+                return "vnd.android.listacompra.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
+            case CarroCompraContract.STATUS_DIR_ELEMENTO:
+                Log.d(TAG, "gotType: vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
+                return "vnd.android.participacion.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
+            case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
+                Log.d(TAG, "gotType: vnd.android.listacompra.elemento.dir/vnd.com.example.rojo.milistadelacompra.provider.carrocompra");
+                return "vnd.android.listacompra.elemento.dir/vnd.com.example.rojo.milistadelacompra.provider.status";
             default:
                 throw new IllegalArgumentException("uri incorrecta: " + uri);
         }

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -111,13 +110,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
                 while(c.moveToNext()){
                     listas.add(c.getString(0));
-                    Log.d(TAG, " Db LISTA: " + c.getString(0));
                 }
-
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_PARTICIPACION + "/" + "listaDeIsma" + "/participante/" + "isma");
-                Cursor c2 = getActivity().getContentResolver().query(uri,null, null, null, null);
-                c2.moveToNext();
-
 
                 res = result;
             } catch (Exception e) {
