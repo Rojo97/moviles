@@ -99,6 +99,7 @@ public class CarroCompraProvider extends ContentProvider {
                             + "' "
                             + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
                     table = CarroCompraContract.TABLEELEMENTO;
+                    orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
                     break;
 
                 default:
@@ -211,8 +212,9 @@ public class CarroCompraProvider extends ContentProvider {
             case CarroCompraContract.STATUS_ITEM_LISTA:
                 id = uri.getLastPathSegment();
                 where = CarroCompraContract.ColumnListaCompra.ID
-                        + "="
+                        + "= '"
                         + id
+                        + "' "
                         + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
                 table = CarroCompraContract.TABLELISTACOMPRA;
                 break;

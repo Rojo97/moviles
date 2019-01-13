@@ -1,8 +1,11 @@
 package com.example.rojo.milistadelacompra;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -59,11 +62,8 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
     private class GetItems extends AsyncTask<String, Void, String> {
         private Context contexto;
         private View view;
-        private static final String url = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
-        private static final String user = "root";
-        private static final String pass = "";
         SharedPreferences preferencias;
-        ArrayList<String> nombreListas = new ArrayList<String>();
+        ArrayList<String> nombreListas = new ArrayList<>();
         DeleteListFragment fragment;
 
         public GetItems(View view, Context contexto, DeleteListFragment fragment){
@@ -85,21 +85,22 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
         protected String doInBackground(String... params) {
             String res;
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection(url, user, pass);
-                System.out.println("Database conection success");
-
                 String user = preferencias.getString("user", "");
 
+                String subSql = "select * from " + CarroCompraContract.TABLEPARTICIPACION + " where " + CarroCompraContract.ColumnParticipacion.LISTA + " = "
+                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '"+user+"'";
 
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from ListaCompra where nickUsuario = '"+user+"' and estado = '1';");
-                ResultSetMetaData rsmd = rs.getMetaData();
+                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1"+
+                        " and exists ( " + subSql +" )" ;
+
+                Cursor c = getActivity().getContentResolver().query(CarroCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
+
                 String result = getResources().getString(R.string.data_charged);
 
-                while (rs.next()) {
-                    nombreListas.add(rs.getString(1));
+                while(c.moveToNext()){
+                    nombreListas.add(c.getString(0));
                 }
+
                 res = result;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -154,8 +155,17 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
                 String user = preferencias.getString("user", "");
 
                 Statement st = con.createStatement();
-                Log.e(TAG, "update ListaCompra set estado = 0 where nombre = '"+listName+"' and nickUsuario = '"+user+"';");
-                st.execute("update ListaCompra set estado = 0 where nombre = '"+listName+"' and nickUsuario = '"+user+"';");
+                Log.e(TAG, "update ListaCompra set estado = 0 where nombre = '"+listName+"' ;");
+                st.execute("update ListaCompra set estado = 0 where nombre = '"+listName+"' ;");
+
+                //Se actualiza en la bd local
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(CarroCompraContract.ColumnListaCompra.STATUS, 0);
+
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName );
+                getActivity().getContentResolver().update(uri, values, null, null);
+
                 String result = getResources().getString(R.string.data_saved);
                 res = result;
 
