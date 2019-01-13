@@ -1,8 +1,10 @@
 package com.example.rojo.milistadelacompra;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class CreateItemFragment extends Fragment implements View.OnClickListener {
@@ -91,9 +94,25 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
                 Statement st = con.createStatement();
                 Log.e(TAG, "insert into Elemento values ('"+name+"', "+ cantidad + ", "+prize+", '"+lista+"', "+0+");");
                 st.execute("insert into Elemento values ('"+name+"', "+ cantidad + ", "+prize+", '"+lista+"', "+0+");");
+
+                //Guardo el elemento en la bd local
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(CarroCompraContract.ColumnElemento.ID, name);
+                values.put(CarroCompraContract.ColumnElemento.QUANTITY, cantidad);
+                values.put(CarroCompraContract.ColumnElemento.PRICE, prize);
+                values.put(CarroCompraContract.ColumnElemento.IDLISTA, lista);
+                values.put(CarroCompraContract.ColumnElemento.STATUS, 0);
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + lista + "/Elementos");
+                getActivity().getContentResolver().insert(uri, values);
+
                 String result = getResources().getString(R.string.data_saved);
                 res = result;
 
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Log.e(TAG, e.toString());
+                res = getResources().getString(R.string.db_duplicate_element);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, e.toString());

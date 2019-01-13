@@ -163,7 +163,6 @@ public class CarroCompraProvider extends ContentProvider {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         long rowId = db.insertWithOnConflict(table, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
-        Log.d(TAG, " Db LLEGAAAA "+ rowId);
         // ¿Se insertó correctamente?
         if (rowId != -1) {
             // Notificar que los datos para la URI han cambiado

@@ -5,6 +5,7 @@
     <string name="data_charged">Data loaded successfully</string>
     <string name="db_error">Error trying to connect to the database</string>
     <string name="db_duplicate_list">There is already a list with that name</string>
+    <string name="db_duplicate_element">There is already an element with that name</string>
     <string name="loading_data">Loading data</string>
     <string name="add_list">Create list</string>
     <string name="settings_text">Settings</string>
