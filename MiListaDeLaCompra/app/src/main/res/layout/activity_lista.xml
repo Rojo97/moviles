@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ListaActivity">
+    tools:context=".ListaActivity"
+    android:background="@drawable/lista">
     <fragment
         android:id="@+id/fragment_lista"
         android:name="com.example.rojo.milistadelacompra.ListaFragment"
