@@ -32,7 +32,7 @@ public class CarroCompraContract {
     public static final int STATUS_ITEM_PARTICIPACION_LISTA= 3;
     public static final int STATUS_DIR_PARTICIPACION = 4;
     public static final int STATUS_DIR_PARTICIPACION_LISTA= 5;
-    public static final int STATUS_ITEM_ELEMENTO = 6;
+    public static final int STATUS_ITEM_ELEMENTO_LISTA = 6;
     public static final int STATUS_DIR_ELEMENTO = 7;
     public static final int STATUS_DIR_ELEMENTO_LISTA = 8;
 
