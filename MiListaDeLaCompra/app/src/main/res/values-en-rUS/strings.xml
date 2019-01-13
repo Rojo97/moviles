@@ -45,4 +45,7 @@
     <string name="delete_item_title_text">Delete item</string>
     <string name="delete_item_name">Name of the item</string>
     <string name="delete_item_button_text">Delete</string>
+    <string name="recover_item_title_text">Recover item</string>
+    <string name="recover_item_button_text">Recover</string>
+    <string name="recover_item">Recover element</string>
 </resources>

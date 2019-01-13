@@ -47,6 +47,11 @@ public class ListaActivity extends AppCompatActivity {
                 intentAdd.putExtras(this.getIntent().getExtras());
                 startActivity(intentAdd);
                 return true;
+            case R.id.recover_element:
+                Intent intentRecover = new Intent(this, RecoverItemActivity.class);
+                intentRecover.putExtras(this.getIntent().getExtras());
+                startActivity(intentRecover);
+                return true;
             case R.id.share_list:
                 Intent intentShare = new Intent(this, ShareListActivity.class);
                 intentShare.putExtras(this.getIntent().getExtras());
