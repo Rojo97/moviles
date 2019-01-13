@@ -3,19 +3,15 @@
 package com.example.rojo.milistadelacompra;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,8 +24,6 @@ public class ListaFragment extends Fragment{
     private static final String TAG = ListaFragment.class.getSimpleName();
     private TextView nombreTextview;
     private String listaNombre;
-    private DbHelper dbHelper;
-    private SQLiteDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -43,9 +37,6 @@ public class ListaFragment extends Fragment{
             nombreTextview.setText(listaNombre);
         }
 
-        if(isAdded()){
-            dbHelper = new DbHelper(getActivity());
-        }
         return view;
     }
 
@@ -96,11 +87,9 @@ public class ListaFragment extends Fragment{
         @Override
         protected String doInBackground(String... params) {
             try {
-                db = dbHelper.getReadableDatabase();
 
-                String sql = "select * from " + StatusContract.TABLEELEMENTO + " where " + StatusContract.ColumnElemento.IDLISTA + " = '"+ listaNombre + "'";
-                String[] args = {};
-                Cursor c = db.rawQuery(sql,  args);
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
+                Cursor c = getActivity().getContentResolver().query(uri, null, null, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
                 productos = new ArrayList<>();
@@ -109,7 +98,6 @@ public class ListaFragment extends Fragment{
                     productos.add(c.getString(0));
                 }
 
-                db.close();
                 res = result;
 
             } catch (Exception e) {

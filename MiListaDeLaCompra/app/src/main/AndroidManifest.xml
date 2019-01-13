@@ -32,8 +32,8 @@
             android:enabled="true"
             android:exported="true"></service>
         <provider
-            android:name="com.example.rojo.milistadelacompra.StatusProvider"
-            android:authorities="com.example.rojo.milistadelacompra.StatusProvider"
+            android:name="com.example.rojo.milistadelacompra.CarroCompraProvider"
+            android:authorities="com.example.rojo.milistadelacompra.CarroCompraProvider"
             android:exported="false" />
     </application>
 

@@ -19,14 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import android.database.sqlite.SQLiteDatabase;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = MainFragment.class.getSimpleName();
-    private DbHelper dbHelper;
-    private SQLiteDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,9 +34,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         ConnectMySql connectMySql = new ConnectMySql(view, this.getActivity(), this);
         connectMySql.execute("");
 
-        if(isAdded()){
-            dbHelper = new DbHelper(getActivity());
-        }
         return view;
 
     }
@@ -102,31 +96,26 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 String user = prefs.getString("user", "");
 
-                db = dbHelper.getReadableDatabase();
+                String subSql = "select * from " + CarroCompraContract.TABLEPARTICIPACION + " where " + CarroCompraContract.ColumnParticipacion.LISTA + " = "
+                        + CarroCompraContract.ColumnListaCompra.ID + " and " + CarroCompraContract.ColumnParticipacion.USER + " = '"+user+"'";
 
-                String subSql = "select * from " + StatusContract.TABLEPARTICIPACION + " where " + StatusContract.ColumnParticipacion.LISTA + " = L."
-                        + StatusContract.ColumnListaCompra.ID + " and " + StatusContract.ColumnParticipacion.USER + " = '"+user+"'";
+                String sql = CarroCompraContract.ColumnListaCompra.STATUS + " = 1"+
+                        " and exists ( " + subSql +" )" ;
 
-                String sql = "select * from " + StatusContract.TABLELISTACOMPRA + " L where " + StatusContract.ColumnListaCompra.STATUS + " = 1"+
-                " and exists ( " + subSql +" )" ;
-
-                Log.d(TAG, " Db "+sql);
-
-                String[] args = {};
-                Cursor c = db.rawQuery(sql,  args);
+                Cursor c = getActivity().getContentResolver().query(CarroCompraContract.CONTENT_URI_LISTA, null, sql, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
                 listas = new ArrayList<String>();
+
 
                 while(c.moveToNext()){
                     listas.add(c.getString(0));
                 }
 
-                db.close();
                 res = result;
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e(TAG, e.toString());
+                Log.e(TAG, e.toString() + " Db " + e.getMessage());
                 res = getResources().getString(R.string.db_error);
             }
             return res;
