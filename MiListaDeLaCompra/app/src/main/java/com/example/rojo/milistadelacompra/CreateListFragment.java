@@ -90,8 +90,8 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
                 st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
 
                 //Se añade la lista en la bd local
-                String sql = String.format("insert into %s (%s, %s, %s) values ('%s', '%s', %d)", StatusContract.TABLELISTACOMPRA,
-                        StatusContract.ColumnListaCompra.ID, StatusContract.ColumnListaCompra.USER, StatusContract.ColumnListaCompra.STATUS,
+                String sql = String.format("insert into %s (%s, %s, %s) values ('%s', '%s', %d)", CarroCompraContract.TABLELISTACOMPRA,
+                        CarroCompraContract.ColumnListaCompra.ID, CarroCompraContract.ColumnListaCompra.USER, CarroCompraContract.ColumnListaCompra.STATUS,
                         listName, user, 1);
                 db.execSQL(sql);
 

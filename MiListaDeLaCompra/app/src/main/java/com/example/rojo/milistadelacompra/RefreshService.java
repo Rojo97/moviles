@@ -71,7 +71,7 @@ public class RefreshService extends IntentService {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(StatusContract.REMOTEURL, StatusContract.REMOTEUSER, StatusContract.REMOTEPASS);
+            Connection con = DriverManager.getConnection(CarroCompraContract.REMOTEURL, CarroCompraContract.REMOTEUSER, CarroCompraContract.REMOTEPASS);
             System.out.println("Database conection success");
             Log.d(TAG, "Database conection success Db");
 
@@ -99,12 +99,12 @@ public class RefreshService extends IntentService {
         try {
             Statement st = con.createStatement();
 
-            Log.d(TAG,String.format("select * from %s where %s = '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.USER, user)+" Db");
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.USER, user));
+            Log.d(TAG,String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user)+" Db");
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.USER, user));
 
-            db.execSQL("delete from " + StatusContract.TABLEPARTICIPACION);
-            db.execSQL("delete from " + StatusContract.TABLELISTACOMPRA);
-            db.execSQL("delete from " + StatusContract.TABLEELEMENTO);
+            db.execSQL("delete from " + CarroCompraContract.TABLEPARTICIPACION);
+            db.execSQL("delete from " + CarroCompraContract.TABLELISTACOMPRA);
+            db.execSQL("delete from " + CarroCompraContract.TABLEELEMENTO);
 
             // Iteramos sobre todos los componentes de timeline
             ContentValues values = new ContentValues();
@@ -114,9 +114,9 @@ public class RefreshService extends IntentService {
 
                 // Insertar en la base de datos
                 values.clear();
-                values.put(StatusContract.ColumnParticipacion.USER, user);
-                values.put(StatusContract.ColumnParticipacion.LISTA, nombreLista);
-                db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,
+                values.put(CarroCompraContract.ColumnParticipacion.USER, user);
+                values.put(CarroCompraContract.ColumnParticipacion.LISTA, nombreLista);
+                db.insertWithOnConflict(CarroCompraContract.TABLEPARTICIPACION, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
 
                 updateLista(con, db, nombreLista, user);
@@ -132,10 +132,10 @@ public class RefreshService extends IntentService {
 
             Statement st = con.createStatement();
 
-            Log.d(TAG, String.format("select * from %s where %s = '%s'", StatusContract.TABLELISTACOMPRA, StatusContract.ColumnListaCompra.ID, idLista) + " Db");
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLELISTACOMPRA, CarroCompraContract.ColumnListaCompra.ID, idLista) + " Db");
             ContentValues values = new ContentValues();
 
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLELISTACOMPRA, StatusContract.ColumnListaCompra.ID, idLista));
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLELISTACOMPRA, CarroCompraContract.ColumnListaCompra.ID, idLista));
 
             //Se coge el primer elemento del ResultSet
             rs.next();
@@ -145,10 +145,10 @@ public class RefreshService extends IntentService {
             if(estado==1 || nickUsuario.equals(user)){
 
                 values.clear();
-                values.put(StatusContract.ColumnListaCompra.ID, idLista);
-                values.put(StatusContract.ColumnListaCompra.USER, nickUsuario);
-                values.put(StatusContract.ColumnListaCompra.STATUS, estado);
-                db.insertWithOnConflict(StatusContract.TABLELISTACOMPRA, null, values,
+                values.put(CarroCompraContract.ColumnListaCompra.ID, idLista);
+                values.put(CarroCompraContract.ColumnListaCompra.USER, nickUsuario);
+                values.put(CarroCompraContract.ColumnListaCompra.STATUS, estado);
+                db.insertWithOnConflict(CarroCompraContract.TABLELISTACOMPRA, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
 
                 updateParticipaciones(con, db, idLista, user);
@@ -164,13 +164,13 @@ public class RefreshService extends IntentService {
 
             Statement st = con.createStatement();
 
-            Log.d(TAG, String.format("select * from %s where %s = '%s' and %s <> '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.LISTA,
-                    idLista, StatusContract.ColumnParticipacion.USER, user) + " Db");
+            Log.d(TAG, String.format("select * from %s where %s = '%s' and %s <> '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.LISTA,
+                    idLista, CarroCompraContract.ColumnParticipacion.USER, user) + " Db");
             ContentValues values = new ContentValues();
 
             //Saca los participantes de la lista distintos a user
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", StatusContract.TABLEPARTICIPACION, StatusContract.ColumnParticipacion.LISTA,
-                    idLista, StatusContract.ColumnParticipacion.USER, user));
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.ColumnParticipacion.LISTA,
+                    idLista, CarroCompraContract.ColumnParticipacion.USER, user));
 
             while(rs.next()){
                 String nickUsuario = rs.getString("nickUsuario");
@@ -180,9 +180,9 @@ public class RefreshService extends IntentService {
                 // Insertar en la base de datos
 
                 values.clear();
-                values.put(StatusContract.ColumnParticipacion.USER, nickUsuario);
-                values.put(StatusContract.ColumnParticipacion.LISTA, idLista);
-                db.insertWithOnConflict(StatusContract.TABLEPARTICIPACION, null, values,
+                values.put(CarroCompraContract.ColumnParticipacion.USER, nickUsuario);
+                values.put(CarroCompraContract.ColumnParticipacion.LISTA, idLista);
+                db.insertWithOnConflict(CarroCompraContract.TABLEPARTICIPACION, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
             }
 
@@ -197,11 +197,11 @@ public class RefreshService extends IntentService {
 
             Statement st = con.createStatement();
 
-            Log.d(TAG, String.format("select * from %s where %s = '%s'", StatusContract.TABLEELEMENTO, StatusContract.ColumnElemento.IDLISTA, idLista) + " Db");
+            Log.d(TAG, String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEELEMENTO, CarroCompraContract.ColumnElemento.IDLISTA, idLista) + " Db");
 
             ContentValues values = new ContentValues();
 
-            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", StatusContract.TABLEELEMENTO, StatusContract.ColumnElemento.IDLISTA, idLista));
+            ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", CarroCompraContract.TABLEELEMENTO, CarroCompraContract.ColumnElemento.IDLISTA, idLista));
 
             while(rs.next()){
                 String nombre = rs.getString("nombre");
@@ -212,12 +212,12 @@ public class RefreshService extends IntentService {
 
 
                 values.clear();
-                values.put(StatusContract.ColumnElemento.ID, nombre);
-                values.put(StatusContract.ColumnElemento.QUANTITY, cantidad);
-                values.put(StatusContract.ColumnElemento.PRICE, precioUnidad);
-                values.put(StatusContract.ColumnElemento.IDLISTA, idLista);
-                values.put(StatusContract.ColumnElemento.STATUS, estado);
-                db.insertWithOnConflict(StatusContract.TABLEELEMENTO, null, values,
+                values.put(CarroCompraContract.ColumnElemento.ID, nombre);
+                values.put(CarroCompraContract.ColumnElemento.QUANTITY, cantidad);
+                values.put(CarroCompraContract.ColumnElemento.PRICE, precioUnidad);
+                values.put(CarroCompraContract.ColumnElemento.IDLISTA, idLista);
+                values.put(CarroCompraContract.ColumnElemento.STATUS, estado);
+                db.insertWithOnConflict(CarroCompraContract.TABLEELEMENTO, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
             }
 

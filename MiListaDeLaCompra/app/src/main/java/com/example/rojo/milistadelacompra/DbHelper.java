@@ -13,7 +13,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // Constructor
     public DbHelper(Context context) {
-        super(context, StatusContract.DB_NAME, null, StatusContract.DB_VERSION);
+        super(context, CarroCompraContract.DB_NAME, null, CarroCompraContract.DB_VERSION);
     }
 
     // Llamado para crear la tabla
@@ -23,39 +23,39 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.d(TAG,  " Db CREAAAAAAAA");
 
         try{
-            db.execSQL("drop table if exists " + StatusContract.TABLEELEMENTO);
-            db.execSQL("drop table if exists " + StatusContract.TABLEPARTICIPACION);
-            db.execSQL("drop table if exists " + StatusContract.TABLELISTACOMPRA);
+            db.execSQL("drop table if exists " + CarroCompraContract.TABLEELEMENTO);
+            db.execSQL("drop table if exists " + CarroCompraContract.TABLEPARTICIPACION);
+            db.execSQL("drop table if exists " + CarroCompraContract.TABLELISTACOMPRA);
 
             //Consultas para crear las tablas de la bd que encesitamos de la bd remota
             String sqlListaCompra = String.format("create table %s (%s text primary key, %s text, %s int)",
-                    StatusContract.TABLELISTACOMPRA,
-                    StatusContract.ColumnListaCompra.ID,
-                    StatusContract.ColumnListaCompra.USER,
-                    StatusContract.ColumnListaCompra.STATUS);
+                    CarroCompraContract.TABLELISTACOMPRA,
+                    CarroCompraContract.ColumnListaCompra.ID,
+                    CarroCompraContract.ColumnListaCompra.USER,
+                    CarroCompraContract.ColumnListaCompra.STATUS);
 
             String sqlParticipacion = String.format("create table %s (%s text, %s text, foreign key (%s) references %s (%s), primary key (%s, %s))",
-                    StatusContract.TABLEPARTICIPACION,
-                    StatusContract.ColumnParticipacion.USER,
-                    StatusContract.ColumnParticipacion.LISTA,
-                    StatusContract.ColumnParticipacion.LISTA,
-                    StatusContract.TABLELISTACOMPRA,
-                    StatusContract.ColumnListaCompra.ID,
-                    StatusContract.ColumnParticipacion.USER,
-                    StatusContract.ColumnParticipacion.LISTA);
+                    CarroCompraContract.TABLEPARTICIPACION,
+                    CarroCompraContract.ColumnParticipacion.USER,
+                    CarroCompraContract.ColumnParticipacion.LISTA,
+                    CarroCompraContract.ColumnParticipacion.LISTA,
+                    CarroCompraContract.TABLELISTACOMPRA,
+                    CarroCompraContract.ColumnListaCompra.ID,
+                    CarroCompraContract.ColumnParticipacion.USER,
+                    CarroCompraContract.ColumnParticipacion.LISTA);
 
             String sqlElemento = String.format("create table %s (%s text , %s int, %s float, %s text, %s int, foreign key (%s) references %s (%s), primary key (%s, %s))",
-                    StatusContract.TABLEELEMENTO,
-                    StatusContract.ColumnElemento.ID,
-                    StatusContract.ColumnElemento.QUANTITY,
-                    StatusContract.ColumnElemento.PRICE,
-                    StatusContract.ColumnElemento.IDLISTA,
-                    StatusContract.ColumnElemento.STATUS,
-                    StatusContract.ColumnElemento.IDLISTA,
-                    StatusContract.TABLELISTACOMPRA,
-                    StatusContract.ColumnListaCompra.ID,
-                    StatusContract.ColumnElemento.ID,
-                    StatusContract.ColumnElemento.IDLISTA);
+                    CarroCompraContract.TABLEELEMENTO,
+                    CarroCompraContract.ColumnElemento.ID,
+                    CarroCompraContract.ColumnElemento.QUANTITY,
+                    CarroCompraContract.ColumnElemento.PRICE,
+                    CarroCompraContract.ColumnElemento.IDLISTA,
+                    CarroCompraContract.ColumnElemento.STATUS,
+                    CarroCompraContract.ColumnElemento.IDLISTA,
+                    CarroCompraContract.TABLELISTACOMPRA,
+                    CarroCompraContract.ColumnListaCompra.ID,
+                    CarroCompraContract.ColumnElemento.ID,
+                    CarroCompraContract.ColumnElemento.IDLISTA);
 
             Log.d(TAG, "onCreate con SQL Db: " + sqlParticipacion);
             Log.d(TAG, "onCreate con SQL Db: " + sqlListaCompra);
@@ -73,9 +73,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
 // Aqui irían las sentencias del tipo ALTER TABLE, de momento lo hacemosmas sencillo...
 // Borramos la vieja base de datos
-        db.execSQL("drop table if exists " + StatusContract.TABLEELEMENTO);
-        db.execSQL("drop table if exists " + StatusContract.TABLEPARTICIPACION);
-        db.execSQL("drop table if exists " + StatusContract.TABLELISTACOMPRA);
+        db.execSQL("drop table if exists " + CarroCompraContract.TABLEELEMENTO);
+        db.execSQL("drop table if exists " + CarroCompraContract.TABLEPARTICIPACION);
+        db.execSQL("drop table if exists " + CarroCompraContract.TABLELISTACOMPRA);
 // Creamos una base de datos nueva
         onCreate(db);
         Log.d(TAG,

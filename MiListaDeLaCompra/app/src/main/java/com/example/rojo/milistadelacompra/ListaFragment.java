@@ -3,19 +3,15 @@
 package com.example.rojo.milistadelacompra;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -98,7 +94,7 @@ public class ListaFragment extends Fragment{
             try {
                 db = dbHelper.getReadableDatabase();
 
-                String sql = "select * from " + StatusContract.TABLEELEMENTO + " where " + StatusContract.ColumnElemento.IDLISTA + " = '"+ listaNombre + "'";
+                String sql = "select * from " + CarroCompraContract.TABLEELEMENTO + " where " + CarroCompraContract.ColumnElemento.IDLISTA + " = '"+ listaNombre + "'";
                 String[] args = {};
                 Cursor c = db.rawQuery(sql,  args);
 
