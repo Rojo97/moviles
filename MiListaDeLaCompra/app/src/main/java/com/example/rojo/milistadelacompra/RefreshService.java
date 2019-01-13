@@ -16,6 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * @author ismpere
+ * @@author vicrojo
+ * Implementación del servicio para actualizar la base de datos local con los datos remotos
+ */
 public class RefreshService extends IntentService {
     static final String TAG = "RefreshService";
 
@@ -29,6 +34,9 @@ public class RefreshService extends IntentService {
     DbHelper dbHelper;
     SQLiteDatabase db;
 
+    /**
+     * Implementación del metodo onCreate del servicio
+     */
     @Override
     public void onCreate() { //En creación
         super.onCreate();
@@ -37,18 +45,25 @@ public class RefreshService extends IntentService {
         dbHelper = new DbHelper(this);
     }
 
+    /**
+     * Implementacion del metodo onHandleIntent para iniciar el servicio cuando se llame
+     * @param intent que lo activa
+     */
     @Override
     protected void onHandleIntent(Intent intent) { //StartService
         Log.d(TAG, "onStated");
 
         this.runFlag = true;
 
+        //Mientras el flag del servicio este activo se actualiza la base de datos local cada 20 segundos (delay)
         while (runFlag) {
+            //Se cargan las preferencias de la aplicación para saber de que usuario obtener los datos
             Log.d(TAG, "Updater running Db");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String user = prefs.getString("user", "");
             String pass = prefs.getString("user_password", "");
             try {
+                //Se actualiza la bd local y se duerme el hilo durante delay
                 updateDB(user, pass);
                 Thread.sleep(DELAY);
             } catch (InterruptedException e) {
@@ -57,6 +72,10 @@ public class RefreshService extends IntentService {
         }
     }
 
+    /**
+     * Implementacion del metodo onDestroy del servicio
+     * Pone el flag de actualización a false
+     */
     @Override
     public void onDestroy() { //StopService
         super.onDestroy();
@@ -66,8 +85,14 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "onDestroyed");
     }
 
+    /**
+     * Implementacion del metodo para actualizar la base de datos local entera
+     * Si el usuario y la contraseña no coinciden a ningun usuario se eliminan los datos
+     * y no se actualiza la base de datos
+     * @param user usuario
+     * @param pass contraseña
+     */
     private void updateDB(String user, String pass) {
-        // Iteramos sobre todos los componentes de timeline
         db = dbHelper.getWritableDatabase();
 
         try {
@@ -76,14 +101,17 @@ public class RefreshService extends IntentService {
             System.out.println("Database conection success");
             Log.d(TAG, "Database conection success Db");
 
+            //Se limpian las tablas de la base de datos local
             db.execSQL("delete from " + ListaCompraContract.TABLEPARTICIPACION);
             db.execSQL("delete from " + ListaCompraContract.TABLELISTACOMPRA);
             db.execSQL("delete from " + ListaCompraContract.TABLEELEMENTO);
 
+            //Se comprueba que el usuario existe en la base de datos remota
             Statement st = con.createStatement();
             String sql = "select * from Usuario where nick = '" + user + "' and contrasenia = '" + pass + "';";
             ResultSet rs = st.executeQuery(sql);
 
+            //Si el usuario existe se actualiza la base de datos
             if (rs.next()) {
                 //Se actualiza la bd local
                 updateTables(con, db, user);
@@ -99,16 +127,23 @@ public class RefreshService extends IntentService {
         Log.d(TAG, "Updater ran Db");
     }
 
+    /**
+     * Implementación del metodo para actualziar las tablas de la base de datos lcoal
+     * @param con connection a la base de datos remota
+     * @param db base de datos local
+     * @param user usuario
+     */
     private void updateTables(Connection con, SQLiteDatabase db, String user) {
         try {
             Statement st = con.createStatement();
 
+            //Se exraen las listas de la compra de la base de datos remota
             Log.d(TAG, String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.USER, user) + " Db");
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.USER, user));
 
-            // Iteramos sobre todos los componentes de timeline
             ContentValues values = new ContentValues();
 
+            //Se introducen todos los datos obtenidos en las listas de la compra de la base de datos lcoal
             while (rs.next()) {
                 String nombreLista = rs.getString("nombreLista");
 
@@ -119,6 +154,7 @@ public class RefreshService extends IntentService {
                 db.insertWithOnConflict(ListaCompraContract.TABLEPARTICIPACION, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
 
+                //Se actualizan todos los datos correspondientes a esa lista
                 updateLista(con, db, nombreLista, user);
             }
         } catch (SQLException e) {
@@ -127,11 +163,19 @@ public class RefreshService extends IntentService {
         }
     }
 
+    /**
+     * Implementacion del metodo para actualziar una lista de la base de datos local
+     * @param con connection a  la base de datos remota
+     * @param db base de datos local
+     * @param idLista nombre de la lista
+     * @param user usuario
+     */
     private void updateLista(Connection con, SQLiteDatabase db, String idLista, String user) {
         try {
 
             Statement st = con.createStatement();
 
+            //Se extrae la lista de la base de datos remota
             Log.d(TAG, String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLELISTACOMPRA, ListaCompraContract.ColumnListaCompra.ID, idLista) + " Db");
             ContentValues values = new ContentValues();
 
@@ -142,8 +186,10 @@ public class RefreshService extends IntentService {
             String nickUsuario = rs.getString("nickUsuario");
             int estado = rs.getInt("estado");
 
+            //Se extraen las listas con estado 1 o que que las ha creado el usuario
             if (estado == 1 || nickUsuario.equals(user)) {
 
+                //Se instroducen los datos en la base de datos local
                 values.clear();
                 values.put(ListaCompraContract.ColumnListaCompra.ID, idLista);
                 values.put(ListaCompraContract.ColumnListaCompra.USER, nickUsuario);
@@ -151,6 +197,7 @@ public class RefreshService extends IntentService {
                 db.insertWithOnConflict(ListaCompraContract.TABLELISTACOMPRA, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
 
+                //Se actualizan las participaciones y elementos de esa lista
                 updateParticipaciones(con, db, idLista, user);
                 updateElementos(con, db, idLista);
             }
@@ -159,11 +206,19 @@ public class RefreshService extends IntentService {
         }
     }
 
+    /**
+     * Implementacion del metodo de actualizacion de las participaciones de una lista
+     * @param con connection a la base de datos remota
+     * @param db base de datos local
+     * @param idLista nombre de la lista
+     * @param user usuario
+     */
     private void updateParticipaciones(Connection con, SQLiteDatabase db, String idLista, String user) {
         try {
 
             Statement st = con.createStatement();
 
+            //Se extraen las participaciones de la lista de la base de datos remota
             Log.d(TAG, String.format("select * from %s where %s = '%s' and %s <> '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.LISTA,
                     idLista, ListaCompraContract.ColumnParticipacion.USER, user) + " Db");
             ContentValues values = new ContentValues();
@@ -172,6 +227,7 @@ public class RefreshService extends IntentService {
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s' and %s <> '%s'", ListaCompraContract.TABLEPARTICIPACION, ListaCompraContract.ColumnParticipacion.LISTA,
                     idLista, ListaCompraContract.ColumnParticipacion.USER, user));
 
+            //Se introducen las participaciones en la base de datos local
             while (rs.next()) {
                 String nickUsuario = rs.getString("nickUsuario");
 
@@ -192,17 +248,25 @@ public class RefreshService extends IntentService {
         }
     }
 
+    /**
+     * Implementacion del metodo de actualizacion de los elementos de la lista en la base de datos local
+     * @param con connection a la base de datos remota
+     * @param db base de datos local
+     * @param idLista nombre de la lista
+     */
     private void updateElementos(Connection con, SQLiteDatabase db, String idLista) {
         try {
 
             Statement st = con.createStatement();
 
+            //Se extraen los elementos de la lista de la base de datos remota
             Log.d(TAG, String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEELEMENTO, ListaCompraContract.ColumnElemento.IDLISTA, idLista) + " Db");
 
             ContentValues values = new ContentValues();
 
             ResultSet rs = st.executeQuery(String.format("select * from %s where %s = '%s'", ListaCompraContract.TABLEELEMENTO, ListaCompraContract.ColumnElemento.IDLISTA, idLista));
 
+            //Se introducen los elementos en la base de datos local
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
                 int cantidad = rs.getInt("cantidad");

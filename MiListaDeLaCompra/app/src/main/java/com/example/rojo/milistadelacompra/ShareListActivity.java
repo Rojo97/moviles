@@ -3,6 +3,11 @@ package com.example.rojo.milistadelacompra;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+/**
+ * @author ismpere
+ * @author vicrojo
+ * Implementación del activity para compartir una lista
+ */
 public class ShareListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

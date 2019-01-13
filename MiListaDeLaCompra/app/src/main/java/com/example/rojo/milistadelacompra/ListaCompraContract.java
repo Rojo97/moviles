@@ -3,8 +3,13 @@
 package com.example.rojo.milistadelacompra;
 
 import android.net.Uri;
-import android.provider.BaseColumns;
 
+/**
+ * @author ismpere
+ * @author vicrojo
+ * Implementación de la clase que almacena todos los valores necesarios con la interacción
+ * con la base de datos remota y local
+ */
 public class ListaCompraContract {
     public static final String REMOTEURL = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
     public static final String REMOTEUSER = "root";
@@ -36,6 +41,7 @@ public class ListaCompraContract {
     public static final int STATUS_DIR_ELEMENTO = 7;
     public static final int STATUS_DIR_ELEMENTO_LISTA = 8;
 
+    //Columnas de la base de datos local con sus argumentos
     public class ColumnParticipacion {
         public static final String USER = "nickUsuario";
         public static final String LISTA = "nombreLista";

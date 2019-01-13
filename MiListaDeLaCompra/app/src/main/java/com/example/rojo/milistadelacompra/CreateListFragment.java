@@ -23,6 +23,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
+ * @author ismpere
+ * @author vicrojo
  * Fragment de la vista crear lista
  */
 public class CreateListFragment extends Fragment implements View.OnClickListener {

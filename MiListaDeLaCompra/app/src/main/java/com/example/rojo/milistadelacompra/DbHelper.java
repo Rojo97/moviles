@@ -8,15 +8,26 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 
+/**
+ * @author ismpere
+ * @author vicrojo
+ * Implementación del SQLiteOpenHelper para la creación y actualización de la base de datos lcoal
+ */
 public class DbHelper extends SQLiteOpenHelper {
     private static final String TAG = DbHelper.class.getSimpleName();
 
-    // Constructor
+    /**
+     * Constructor por defecto de la clase DBHelper
+     * @param context contexto
+     */
     public DbHelper(Context context) {
         super(context, ListaCompraContract.DB_NAME, null, ListaCompraContract.DB_VERSION);
     }
 
-    // Llamado para crear la tabla
+    /**
+     * Implementación del método onCreate que elimina las tablas de la base de datos local y las crea de nuevo con los atributos necesarios
+     * @param db base de datos de SQLite
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -69,7 +80,10 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    // Llamado siempre que tengamos una nueva version
+    /**
+     * Implementación del método de actualización de la base de datos local
+     * Elimina las tablas y vuelve a crear la base de datos
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

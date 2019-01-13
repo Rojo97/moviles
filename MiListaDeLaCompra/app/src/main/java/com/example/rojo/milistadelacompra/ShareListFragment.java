@@ -21,6 +21,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * @author ismpere
+ * @author vicrojo
+ * Implementación del fragment de la vista para compartir una lista de la compra
+ */
 public class ShareListFragment extends Fragment implements View.OnClickListener {
     private Button boton;
     private static final String TAG = ListaFragment.class.getSimpleName();
@@ -28,6 +33,14 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
     private String lista = "";
     private TextView titulo;
 
+    /**
+     * Implementación del método onCreate del fragment
+     * Rellena los datos de la vista para compartir una lista
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_share_list, container, false);
@@ -48,6 +61,10 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
     }
 
 
+    /**
+     * Implementación del método onClick
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -55,6 +72,9 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
         new ConnectMySql(this.getView(), this.getActivity()).execute(user, lista);
     }
 
+    /**
+     * Implementación de la AsyncTask para compartir la lista con otro usuario
+     */
     private class ConnectMySql extends AsyncTask<String, Void, String> {
         private Context contexto;
         private View view;
@@ -62,16 +82,30 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
         private static final String user = "root";
         private static final String pass = "";
 
+        /**
+         * Constructor por defecto de la clase ConnectMySql
+         * @param view
+         * @param contexto
+         */
         public ConnectMySql(View view, Context contexto) {
             this.view = view;
             this.contexto = contexto;
         }
 
+        /**
+         * Implementación del método onPreExecute
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
+        /**
+         * Se ejecuta en segundo plano y valida el formulario de compartir lista
+         * Si el formulario es válido almacena la participación en la bd local y en la bd remota
+         * @param params
+         * @return Mensaje de respuesta al intento de compartir la lista
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -129,6 +163,11 @@ public class ShareListFragment extends Fragment implements View.OnClickListener 
             return res;
         }
 
+        /**
+         * Implementación del método onPostExecute
+         * Informa del resultado de compartir la lista
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
             Log.e(TAG, result);

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
 /**
+ * @author ismpere
+ * @author vicrojo
  * Activity para crear una lista
  */
 public class CreateListActivity extends AppCompatActivity {

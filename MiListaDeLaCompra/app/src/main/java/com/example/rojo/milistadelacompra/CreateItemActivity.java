@@ -3,6 +3,11 @@ package com.example.rojo.milistadelacompra;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+/**
+ * @author ismpere
+ * @author vicrojo
+ * Implementación del activity para crear un elemento de la lista
+ */
 public class CreateItemActivity extends AppCompatActivity { //Activity de crear item
     @Override
     protected void onCreate(Bundle savedInstanceState) {

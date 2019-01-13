@@ -22,6 +22,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
+ * @author ismpere
+ * @author vicrojo
  * Fragment de la creacion de elementos de una lista
  */
 public class CreateItemFragment extends Fragment implements View.OnClickListener {
