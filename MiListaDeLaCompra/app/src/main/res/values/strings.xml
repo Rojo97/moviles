@@ -51,4 +51,5 @@
     <string name="recover_list">Recuperar lista</string>
     <string name="edit_item">Editar elemento</string>
     <string name="edit_item_button_text">Editar</string>
+    <string name="insert_something">Introduzca un parámetro</string>
 </resources>
