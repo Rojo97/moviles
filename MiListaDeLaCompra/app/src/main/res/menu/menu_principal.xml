@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/reload"
+        android:icon="@android:drawable/ic_menu_rotate"
+        app:showAsAction="always|withText"
+        android:title="@string/reload" />
+
+    <item
+        android:id="@+id/add_list"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="always|withText"
+        android:title="@string/add_list" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/settings_text" />
+    <item
+        android:id="@+id/register"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/register" />
+
+    <item
+        android:id="@+id/delete_list"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/delete_list" />
+
+    <item
+        android:id="@+id/recover_list"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:title="@string/recover_list" />
+
+    <item
+        android:id="@+id/itemServiceStart"
+        android:title="@string/start_service"
+        android:icon="@android:drawable/ic_media_play" />
+
+    <item
+        android:id="@+id/itemServiceStop"
+        android:title="@string/stop_service"
+        android:icon="@android:drawable/ic_media_pause" />
+</menu>
