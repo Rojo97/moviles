@@ -20,8 +20,6 @@ import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -66,9 +64,6 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
     private class GetItems extends AsyncTask<String, Void, String> {
         private Context contexto;
         private View view;
-        private static final String url = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
-        private static final String user = "root";
-        private static final String pass = "";
         ArrayList<String> nombreItems = new ArrayList<String>();
         DeleteItemFragment fragment;
 
@@ -155,6 +150,7 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
                 Log.e(TAG, "update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
                 st.execute("update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
 
+                //Se actualiza en la bd local
                 ContentValues values = new ContentValues();
                 values.clear();
                 values.put(CarroCompraContract.ColumnElemento.REMOVED, 1);
