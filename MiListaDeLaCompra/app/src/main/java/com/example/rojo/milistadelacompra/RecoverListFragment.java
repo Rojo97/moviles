@@ -28,6 +28,13 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
     private static final String TAG = ListaFragment.class.getSimpleName();
     private Spinner listas;
 
+    /**
+     * Inicializa el fragment y pide las listas borradas
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recover_list, container, false);
@@ -39,7 +46,10 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-
+    /**
+     * Al hacer click en el boton se restaura la lista seleccionada
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -47,6 +57,10 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
         new ConnectMySql(this.getView(), this.getActivity()).execute(nameList);
     }
 
+    /**
+     * Cuando se han cargado las listas se añaden al spinner
+     * @param listas
+     */
     public void onTaskFinished(ArrayList<String> listas) {
         if (listas != null) {
             String[] nombrelistas = new String[listas.size()];
@@ -75,6 +89,11 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
             super.onPreExecute();
         }
 
+        /**
+         * Obtiene las listas borradas
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -130,6 +149,11 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
             super.onPreExecute();
         }
 
+        /**
+         * Marca la lista como no borrada tanto en local como en remoto
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;

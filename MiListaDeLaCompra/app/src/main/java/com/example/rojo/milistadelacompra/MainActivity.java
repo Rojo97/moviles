@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Activity inicial co la vista de seleccionar lista
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -16,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    /**
+     * Al volver de otra vista recargamos la vista
+     */
     @Override
     public void onRestart() {
         super.onRestart();
@@ -23,15 +29,25 @@ public class MainActivity extends AppCompatActivity {
         startActivity(getIntent());
     }
 
+    /**
+     * Crea ek menú
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_principal, menu);
         return true;
     }
 
+    /**
+     * Controla la opcion del menú que se ha pulsado
+     * @param item
+     * @return
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.reload:
+            case R.id.reload: //Recarga la vista
                 finish();
                 startActivity(getIntent());
                 return true;

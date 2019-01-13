@@ -28,6 +28,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private EditText newSurname1;
     private EditText newSurname2;
 
+    /**
+     * Inicializa el fragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
@@ -41,7 +48,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
+    /**
+     * Al hacer click en el boton se pide que se guarden los datos
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -70,6 +80,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             super.onPreExecute();
         }
 
+        /**
+         * Guarad los datos en la base de datos remota
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -123,11 +138,5 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             return res;
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            Log.e(TAG, result);
-            Toast.makeText(contexto, result, Toast.LENGTH_SHORT)
-                    .show();
-        }
     }
 }

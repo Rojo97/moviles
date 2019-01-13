@@ -3,6 +3,9 @@ package com.example.rojo.milistadelacompra;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+/**
+ * Activity de la vista editar elemento
+ */
 public class EditItemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -12,7 +15,7 @@ public class EditItemActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Crear un fragment
             EditItemFragment fragment = new EditItemFragment();
-            fragment.setArguments(this.getIntent().getExtras());
+            fragment.setArguments(this.getIntent().getExtras()); //Le pasamos el nombre de la lista al fragment
             getFragmentManager()
                     .beginTransaction()
                     .add(android.R.id.content, fragment, fragment.getClass().getSimpleName())

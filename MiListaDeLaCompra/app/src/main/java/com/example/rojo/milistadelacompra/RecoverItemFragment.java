@@ -27,6 +27,13 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
     private Spinner items;
     String listaNombre;
 
+    /**
+     * Inicializa el fragment y pide los elementos borrados
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recover_item, container, false);
@@ -42,7 +49,10 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-
+    /**
+     * Al hacer click en el boton se pide que se marque el elemento como no borrado
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -50,6 +60,10 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
         new ConnectMySql(this.getView(), this.getActivity()).execute(nameItem);
     }
 
+    /**
+     * Cuando se tienen los elementos borrados se añaden al spinner
+     * @param items
+     */
     public void onTaskFinished(ArrayList<String> items) {
         if (items != null) {
             String[] nombreItems = new String[items.size()];
@@ -77,6 +91,11 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
 
         }
 
+        /**
+         * Obtiene los elementos borrados de la lista
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -126,6 +145,11 @@ public class RecoverItemFragment extends Fragment implements View.OnClickListene
             super.onPreExecute();
         }
 
+        /**
+         * Marca los elementos como no borrados tanto en local como en remoto
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
