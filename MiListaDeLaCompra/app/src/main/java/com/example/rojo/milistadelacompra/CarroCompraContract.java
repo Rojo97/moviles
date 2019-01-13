@@ -19,7 +19,7 @@ public class CarroCompraContract {
     public static final String TABLEELEMENTO = "Elemento";
     public static final String DEFAULT_SORT_LISTA = ColumnListaCompra.ID + " DESC";
     public static final String DEFAULT_SORT_PARTICIPACION = ColumnParticipacion.LISTA + " DESC";
-    public static final String DEFAULT_SORT_ELEMENTO = ColumnElemento.ID + " DESC";
+    public static final String DEFAULT_SORT_ELEMENTO = ColumnElemento.STATUS + " ASC";
 
     // Constantes del content provider
     // content://com.example.rojo.milistadelacompra.CarroCompraProvider/status

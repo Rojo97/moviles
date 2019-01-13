@@ -99,6 +99,7 @@ public class CarroCompraProvider extends ContentProvider {
                             + "' "
                             + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
                     table = CarroCompraContract.TABLEELEMENTO;
+                    orderBy = (TextUtils.isEmpty(sortOrder)) ? CarroCompraContract.DEFAULT_SORT_ELEMENTO : sortOrder;
                     break;
 
                 default:
