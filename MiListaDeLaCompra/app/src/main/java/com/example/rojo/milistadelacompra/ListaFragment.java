@@ -99,8 +99,6 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(contexto, getResources().getString(R.string.loading_data), Toast.LENGTH_SHORT)
-                    .show();
 
         }
 
@@ -136,6 +134,8 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
                 Log.e(TAG, e.toString());
                 res = getResources().getString(R.string.db_error);
+                Toast.makeText(contexto, res, Toast.LENGTH_SHORT)
+                        .show();
             }
             return res;
         }
@@ -143,8 +143,6 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(String result) {
             Log.e(TAG, result);
-            Toast.makeText(contexto, result, Toast.LENGTH_SHORT)
-                    .show();
         }
     }
 
@@ -169,9 +167,6 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(contexto, getResources().getString(R.string.loading_data), Toast.LENGTH_SHORT)
-                    .show();
-
         }
 
         @Override

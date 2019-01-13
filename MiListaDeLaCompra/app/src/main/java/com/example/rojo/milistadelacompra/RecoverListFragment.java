@@ -73,9 +73,6 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(contexto, getResources().getString(R.string.saving_data), Toast.LENGTH_SHORT)
-                    .show();
-
         }
 
         @Override
@@ -110,8 +107,6 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
         @Override
         protected void onPostExecute(String result) {
             Log.e(TAG, result);
-            Toast.makeText(contexto, result, Toast.LENGTH_SHORT)
-                    .show();
             fragment.onTaskFinished(nombreListas);
 
         }
@@ -133,9 +128,6 @@ public class RecoverListFragment extends Fragment implements View.OnClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(contexto, getResources().getString(R.string.saving_data), Toast.LENGTH_SHORT)
-                    .show();
-
         }
 
         @Override

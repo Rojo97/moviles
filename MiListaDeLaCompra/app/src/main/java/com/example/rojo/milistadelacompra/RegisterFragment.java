@@ -68,9 +68,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(contexto, getResources().getString(R.string.loading_data), Toast.LENGTH_SHORT)
-                    .show();
-
         }
 
         @Override
