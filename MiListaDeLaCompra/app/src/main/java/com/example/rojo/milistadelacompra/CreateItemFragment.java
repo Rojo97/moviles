@@ -29,6 +29,7 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
     private EditText newPrize;
     private String lista = "";
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_create_item, container, false);

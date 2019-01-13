@@ -17,9 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-public class ListaFragment extends Fragment{
+public class ListaFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ListaFragment.class.getSimpleName();
     private TextView nombreTextview;
@@ -52,12 +57,84 @@ public class ListaFragment extends Fragment{
                 item.setLayoutParams(layoutParams);
                 item.setText(productos.get(i));
                 item.setTag(productos.get(i));
-                //item.setOnClickListener(this);
+                item.setOnClickListener(this);
                 item.setTextSize(25);
                 layout.addView(item);
                 this.getView().destroyDrawingCache();
                 this.getView().refreshDrawableState();
             }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        String tag = view.getTag().toString();
+        String estado;
+        if(checked == true){
+            estado = "1";
+        }else{
+            estado = "0";
+        }
+        new UpdateElement(this.getView(),this.getActivity(), this).execute(tag, estado);
+    }
+
+    private class UpdateElement extends AsyncTask<String, Void, String> {
+        String res = "";
+
+        Context contexto;
+        View view;
+        ListaFragment fragment;
+        ArrayList<String> productos;
+        private static final String url = "jdbc:mysql://virtual.lab.inf.uva.es:20064/listaCompra";
+        private static final String user = "root";
+        private static final String pass = "";
+
+        public UpdateElement(View view, Context contexto, ListaFragment fragment){
+            this.view = view;
+            this.contexto = contexto;
+            this.fragment = fragment;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(contexto, getResources().getString(R.string.loading_data), Toast.LENGTH_SHORT)
+                    .show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String res;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection(url, user, pass);
+                System.out.println("Database conection success");
+
+                String nombre = params[0];
+                String estado = params[1];
+
+                Statement st = con.createStatement();
+                Log.e(TAG,"update Elemento set estado = "+ estado +" where nombre = '" +nombre+"' and  nombreLista = '"+listaNombre+"';");
+                st.execute("update Elemento set estado = "+ estado +" where nombre = '" +nombre+"' and  nombreLista = '"+listaNombre+"';");
+                String result = getResources().getString(R.string.data_charged);
+
+                res = result;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, e.toString());
+                res = getResources().getString(R.string.db_error);
+            }
+            return res;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.e(TAG, result);
+            Toast.makeText(contexto, result, Toast.LENGTH_SHORT)
+                    .show();
+            fragment.onTaskFinished(productos);
         }
     }
 
