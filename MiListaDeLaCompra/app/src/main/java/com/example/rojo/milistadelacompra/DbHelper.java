@@ -20,7 +20,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.d(TAG,  " Db CREAAAAAAAA");
+        Log.d(TAG,  " Crea la Db local");
 
         try{
             db.execSQL("drop table if exists " + CarroCompraContract.TABLEELEMENTO);
@@ -44,13 +44,14 @@ public class DbHelper extends SQLiteOpenHelper {
                     CarroCompraContract.ColumnParticipacion.USER,
                     CarroCompraContract.ColumnParticipacion.LISTA);
 
-            String sqlElemento = String.format("create table %s (%s text , %s int, %s float, %s text, %s int, foreign key (%s) references %s (%s), primary key (%s, %s))",
+            String sqlElemento = String.format("create table %s (%s text , %s int, %s float, %s text, %s int, %s int, foreign key (%s) references %s (%s), primary key (%s, %s))",
                     CarroCompraContract.TABLEELEMENTO,
                     CarroCompraContract.ColumnElemento.ID,
                     CarroCompraContract.ColumnElemento.QUANTITY,
                     CarroCompraContract.ColumnElemento.PRICE,
                     CarroCompraContract.ColumnElemento.IDLISTA,
                     CarroCompraContract.ColumnElemento.STATUS,
+                    CarroCompraContract.ColumnElemento.REMOVED,
                     CarroCompraContract.ColumnElemento.IDLISTA,
                     CarroCompraContract.TABLELISTACOMPRA,
                     CarroCompraContract.ColumnListaCompra.ID,

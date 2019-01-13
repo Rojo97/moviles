@@ -88,8 +88,9 @@ public class ListaFragment extends Fragment{
         protected String doInBackground(String... params) {
             try {
 
+                String where = CarroCompraContract.ColumnElemento.REMOVED +" = 0";
                 Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
-                Cursor c = getActivity().getContentResolver().query(uri, null, null, null, null);
+                Cursor c = getActivity().getContentResolver().query(uri, null, where, null, null);
 
                 String result = getResources().getString(R.string.data_charged);
                 productos = new ArrayList<>();
