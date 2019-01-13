@@ -3,18 +3,17 @@ package com.example.rojo.milistadelacompra;
 import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,18 +22,22 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class DeleteItemFragment extends Fragment implements View.OnClickListener {
+public class EditItemFragment extends Fragment implements View.OnClickListener {
     private Button boton;
     private static final String TAG = ListaFragment.class.getSimpleName();
     private Spinner items;
     String listaNombre;
+    private EditText newQuantity;
+    private EditText newPrize;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_delete_item, container, false);
-        boton = view.findViewById(R.id.delete_item_button);
+        View view = inflater.inflate(R.layout.fragment_edit_item, container, false);
+        boton = view.findViewById(R.id.edit_item_button);
         boton.setOnClickListener(this);
-        items = view.findViewById(R.id.select_item);
+        items = view.findViewById(R.id.select_item_edit);
+        newPrize = view.findViewById(R.id.item_prize);
+        newQuantity = view.findViewById(R.id.item_quantity);
         Bundle bundle = getArguments();
         if(bundle != null) {
             listaNombre = bundle.getString("LISTA_NOMBRE");
@@ -49,7 +52,10 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
         String nameItem = items.getSelectedItem().toString();
-        new ConnectMySql(this.getView(), this.getActivity()).execute(nameItem);
+        String quantity = newQuantity.getText().toString();
+        String prize = newPrize.getText().toString();
+
+        new ConnectMySql(this.getView(), this.getActivity()).execute(nameItem, quantity, prize);
     }
 
     public void onTaskFinished(ArrayList<String> items){
@@ -65,9 +71,9 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
         private Context contexto;
         private View view;
         ArrayList<String> nombreItems = new ArrayList<String>();
-        DeleteItemFragment fragment;
+        EditItemFragment fragment;
 
-        public GetItems(View view, Context contexto, DeleteItemFragment fragment){
+        public GetItems(View view, Context contexto, EditItemFragment fragment){
             this.view = view;
             this.contexto = contexto;
             this.fragment = fragment;
@@ -138,14 +144,17 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
         @Override
         protected String doInBackground(String... params) {
             String res;
-            Log.d(TAG, "Trying to insert "+ params[0]);
+            Log.d(TAG, "Trying to insert "+ params[0] +" "+ params[1]+" "+params[2]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
                 System.out.println("Database conection success");
 
                 String itemName = params[0];
+                String quantity = params[1];
+                String prize = params[2];
 
+                //TODO Update en local y en remoto
                 Statement st = con.createStatement();
                 Log.e(TAG, "update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
                 st.execute("update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");

@@ -62,6 +62,11 @@ public class ListaActivity extends AppCompatActivity {
                 intentDelete.putExtras(this.getIntent().getExtras());
                 startActivity(intentDelete);
                 return true;
+            case R.id.edit_element:
+                Intent intentEdit = new Intent(this, EditItemActivity.class);
+                intentEdit.putExtras(this.getIntent().getExtras());
+                startActivity(intentEdit);
+                return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;

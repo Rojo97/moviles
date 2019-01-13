@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".RecoverItemActivity">
+    tools:context=".EditItemActivity">
     <fragment
-        android:id="@+id/fragment_recover_item"
-        android:name="com.example.rojo.milistadelacompra.RecoverItemFragment"
+        android:id="@+id/fragment_edit_item"
+        android:name="com.example.rojo.milistadelacompra.EditItemFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

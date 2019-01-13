@@ -20,6 +20,11 @@
         android:title="@string/delete_element" />
 
     <item
+        android:id="@+id/edit_element"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/edit_item" />
+
+    <item
         android:id="@+id/recover_element"
         android:icon="@android:drawable/ic_menu_revert"
         android:title="@string/recover_item" />

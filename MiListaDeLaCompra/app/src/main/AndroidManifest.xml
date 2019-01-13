@@ -22,6 +22,7 @@
         <activity android:name=".DeleteItemActivity"/>
         <activity android:name=".RecoverItemActivity"/>
         <activity android:name=".RecoverListActivity"/>
+        <activity android:name=".EditItemActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
