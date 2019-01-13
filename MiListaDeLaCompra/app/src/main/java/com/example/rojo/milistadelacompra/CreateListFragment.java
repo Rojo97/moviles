@@ -22,6 +22,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Fragment de la vista crear lista
+ */
 public class CreateListFragment extends Fragment implements View.OnClickListener {
     private Button boton;
     private static final String TAG = ListaFragment.class.getSimpleName();
@@ -29,6 +32,13 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
     private DbHelper dbHelper;
     private SQLiteDatabase db;
 
+    /**
+     * Inicializa el fragment al crear la vista
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_list, container, false);
@@ -43,7 +53,10 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
         return view;
     }
 
-
+    /**
+     * Llama a ala async task para poder crear la lista
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -71,6 +84,11 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
 
         }
 
+        /**
+         * Introduce en la base de datos local y remota la nueva lista
+         * @param params
+         * @return String con un mensaje dependeiendo si se ha podido introducir o no
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;

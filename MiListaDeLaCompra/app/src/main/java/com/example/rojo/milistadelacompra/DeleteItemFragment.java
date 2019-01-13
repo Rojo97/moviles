@@ -27,22 +27,32 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
     private Spinner items;
     String listaNombre;
 
+    /**
+     * Inicializa el fragment y extrae el nombre de la lista de dode venimos
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delete_item, container, false);
         boton = view.findViewById(R.id.delete_item_button);
         boton.setOnClickListener(this);
         items = view.findViewById(R.id.select_item);
-        Bundle bundle = getArguments();
+        Bundle bundle = getArguments(); //Nombre de la lista de donde venimos
         if (bundle != null) {
             listaNombre = bundle.getString("LISTA_NOMBRE");
         }
-        GetItems getItems = new GetItems(view, this.getActivity(), this);
+        GetItems getItems = new GetItems(view, this.getActivity(), this); //Llamamos a una asyc task para obtener los items
         getItems.execute("");
         return view;
     }
 
-
+    /**
+     * Al hacer click se elimina la lisa
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -50,6 +60,10 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
         new ConnectMySql(this.getView(), this.getActivity()).execute(nameItem);
     }
 
+    /**
+     * Guarda los elementos proporcionados en el AsyncTask en el spinner para poder seleccionarlos
+     * @param items
+     */
     public void onTaskFinished(ArrayList<String> items) {
         if (items != null) {
             String[] nombreItems = new String[items.size()];
@@ -77,6 +91,11 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
 
         }
 
+        /**
+         * Obtiene los elementos que se pueden borrar de una lista
+         * @param params
+         * @return String con un mensaje dependiendo de si se ha podido buscar o no
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -129,6 +148,11 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
 
         }
 
+        /**
+         * Marca como borrado el elemento en la base de datos remosta y local
+         * @param params
+         * @return String dependiendo de si se ha podido borrar o no el elemento
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;

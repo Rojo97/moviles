@@ -21,6 +21,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Fragment de la creacion de elementos de una lista
+ */
 public class CreateItemFragment extends Fragment implements View.OnClickListener {
     private Button boton;
     private static final String TAG = ListaFragment.class.getSimpleName();
@@ -30,6 +33,13 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
     private String lista = "";
 
 
+    /**
+     * Inicializa el fragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return vista
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_item, container, false);
@@ -38,14 +48,17 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
         newItem = view.findViewById(R.id.new_item_name);
         newQuantity = view.findViewById(R.id.new_item_quantity);
         newPrize = view.findViewById(R.id.new_item_prize);
-        Bundle bundle = getArguments();
+        Bundle bundle = getArguments(); //Recibe el nombre de la lista de donde venimos
         if (bundle != null) {
             lista = bundle.getString("LISTA_NOMBRE");
         }
         return view;
     }
 
-
+    /**
+     * Encargado de llamar al AsyncTask cuando se pulsa el boton y de pasarle los argumentos
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -75,6 +88,11 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
 
         }
 
+        /**
+         * Guarda el nuevo item en la base de datos local y en la remota
+         * @param params nombre del item, cantidad, precio y lista a la que pretenece
+         * @return String dependiedno de si se ha guardado o no
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;

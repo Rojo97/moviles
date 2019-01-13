@@ -28,6 +28,13 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
     private static final String TAG = ListaFragment.class.getSimpleName();
     private Spinner listas;
 
+    /**
+     * Inicilaiza la vista y pide las listas que se pueden borrar
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delete_list, container, false);
@@ -39,7 +46,10 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
         return view;
     }
 
-
+    /**
+     * Al hacer click en el boton se elimina la vista
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -47,6 +57,10 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
         new ConnectMySql(this.getView(), this.getActivity()).execute(nameList);
     }
 
+    /**
+     * Encargado de añadis las listas que se pueden borrar al spinner
+     * @param listas
+     */
     public void onTaskFinished(ArrayList<String> listas) {
         if (listas != null) {
             String[] nombrelistas = new String[listas.size()];
@@ -76,6 +90,11 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
 
         }
 
+        /**
+         * Obtienen las listas que se pueden borrar
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -134,6 +153,11 @@ public class DeleteListFragment extends Fragment implements View.OnClickListener
 
         }
 
+        /**
+         * Elimina la lista de la base de datos local y remota
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;

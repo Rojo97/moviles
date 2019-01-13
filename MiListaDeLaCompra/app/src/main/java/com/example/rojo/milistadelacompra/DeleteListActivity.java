@@ -3,6 +3,9 @@ package com.example.rojo.milistadelacompra;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+/**
+ * Activity de la vista borrar lista
+ */
 public class DeleteListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
