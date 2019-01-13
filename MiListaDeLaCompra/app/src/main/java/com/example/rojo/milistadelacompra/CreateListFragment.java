@@ -30,13 +30,13 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
     private SQLiteDatabase db;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_list, container, false);
         boton = view.findViewById(R.id.new_list_button);
         boton.setOnClickListener(this);
         newList = view.findViewById(R.id.new_list_name);
 
-        if(isAdded()){
+        if (isAdded()) {
             dbHelper = new DbHelper(getActivity());
         }
 
@@ -58,7 +58,7 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
         private static final String user = "root";
         private static final String pass = "";
 
-        public ConnectMySql(View view, Context contexto){
+        public ConnectMySql(View view, Context contexto) {
             this.view = view;
             this.contexto = contexto;
         }
@@ -74,44 +74,52 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
         @Override
         protected String doInBackground(String... params) {
             String res;
-            Log.d(TAG, "Trying to insert "+ params[0]);
+            Log.d(TAG, "Trying to insert " + params[0]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
                 System.out.println("Database conection success");
 
                 String listName = params[0];
-                SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
-                String user = preferencias.getString("user", "");
 
-                Statement st = con.createStatement();
-                Log.e(TAG, "insert into ListaCompra values ('"+listName+"', '"+ user + "', '"+1+");");
-                st.executeUpdate("insert into ListaCompra values ('"+listName+"', '"+ user + "', "+1+");");
-                st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
+                if (!listName.equals("")) {
+                    SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
+                    String user = preferencias.getString("user", "");
+
+                    listName = listName.trim();
+
+                    Statement st = con.createStatement();
+                    Log.e(TAG, "insert into ListaCompra values ('" + listName + "', '" + user + "', '" + 1 + ");");
+                    st.executeUpdate("insert into ListaCompra values ('" + listName + "', '" + user + "', " + 1 + ");");
+                    st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('" + user + "', '" + listName + "');");
 
 
-                //Guardo los datos en la bd local
-                ContentValues values = new ContentValues();
-                values.clear();
-                values.put(CarroCompraContract.ColumnListaCompra.ID, listName);
-                values.put(CarroCompraContract.ColumnListaCompra.USER, user);
-                values.put(CarroCompraContract.ColumnListaCompra.STATUS, 1);
-                getActivity().getContentResolver().insert(CarroCompraContract.CONTENT_URI_LISTA, values);
+                    //Guardo los datos en la bd local
+                    ContentValues values = new ContentValues();
+                    values.clear();
+                    values.put(CarroCompraContract.ColumnListaCompra.ID, listName);
+                    values.put(CarroCompraContract.ColumnListaCompra.USER, user);
+                    values.put(CarroCompraContract.ColumnListaCompra.STATUS, 1);
+                    getActivity().getContentResolver().insert(CarroCompraContract.CONTENT_URI_LISTA, values);
 
-                values.clear();
-                values.put(CarroCompraContract.ColumnParticipacion.USER, user);
-                values.put(CarroCompraContract.ColumnParticipacion.LISTA, listName);
-                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName + "/Participantes");
-                getActivity().getContentResolver().insert(uri, values);
+                    values.clear();
+                    values.put(CarroCompraContract.ColumnParticipacion.USER, user);
+                    values.put(CarroCompraContract.ColumnParticipacion.LISTA, listName);
+                    Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName + "/Participantes");
+                    getActivity().getContentResolver().insert(uri, values);
 
-                String result = getResources().getString(R.string.data_saved);
-                res = result;
+                    String result = getResources().getString(R.string.data_saved);
+                    res = result;
+                } else {
+                    res = getResources().getString(R.string.insert_list_name);
+                }
+
 
             } catch (SQLException e) {
                 e.printStackTrace();
                 Log.e(TAG, e.toString());
                 res = getResources().getString(R.string.db_duplicate_list);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, e.toString());
                 res = getResources().getString(R.string.db_error);

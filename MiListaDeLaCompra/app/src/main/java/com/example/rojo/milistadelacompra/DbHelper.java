@@ -20,9 +20,9 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.d(TAG,  " Crea la Db local");
+        Log.d(TAG, " Crea la Db local");
 
-        try{
+        try {
             db.execSQL("drop table if exists " + CarroCompraContract.TABLEELEMENTO);
             db.execSQL("drop table if exists " + CarroCompraContract.TABLEPARTICIPACION);
             db.execSQL("drop table if exists " + CarroCompraContract.TABLELISTACOMPRA);
@@ -64,10 +64,11 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL(sqlListaCompra);
             db.execSQL(sqlParticipacion);
             db.execSQL(sqlElemento);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d(TAG, e.getMessage() + " Db");
         }
     }
+
     // Llamado siempre que tengamos una nueva version
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

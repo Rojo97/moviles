@@ -1,7 +1,8 @@
 /*Victor Rojo Alvarez
-* Ismael Perez Martin*/
+ * Ismael Perez Martin*/
 package com.example.rojo.milistadelacompra;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,13 +32,13 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
     private String listaNombre;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista, container, false);
         nombreTextview = view.findViewById(R.id.nombre_lista);
         Bundle bundle = getArguments();
         ConnectMySql conection = new ConnectMySql(view, this.getActivity(), this);
         conection.execute();
-        if(bundle != null) {
+        if (bundle != null) {
             listaNombre = bundle.getString("LISTA_NOMBRE");
             nombreTextview.setText(listaNombre);
         }
@@ -45,19 +46,19 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public void onTaskFinished(ArrayList<String> productos, ArrayList<Integer> estados, ArrayList<Double> precios, ArrayList<Integer> cantidades){
+    public void onTaskFinished(ArrayList<String> productos, ArrayList<Integer> estados, ArrayList<Double> precios, ArrayList<Integer> cantidades) {
         LinearLayout layout = this.getView().findViewById(R.id.my_products);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        if(productos!=null){
+        if (productos != null) {
             for (int i = 0; i < productos.size(); i++) {
                 CheckBox item = new CheckBox(this.getActivity());
                 item.setLayoutParams(layoutParams);
-                item.setText(cantidades.get(i)+" "+productos.get(i)+" ("+ precios.get(i)+"€)");
+                item.setText(cantidades.get(i) + " " + productos.get(i) + " (" + precios.get(i) + "€)");
                 item.setTag(productos.get(i));
-                item.setChecked(estados.get(i)==1);
+                item.setChecked(estados.get(i) == 1);
                 item.setOnClickListener(this);
                 item.setTextSize(25);
                 layout.addView(item);
@@ -72,12 +73,12 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         boolean checked = ((CheckBox) view).isChecked();
         String tag = view.getTag().toString();
         String estado;
-        if(checked == true){
+        if (checked == true) {
             estado = "1";
-        }else{
+        } else {
             estado = "0";
         }
-        new UpdateElement(this.getView(),this.getActivity(), this).execute(tag, estado);
+        new UpdateElement(this.getView(), this.getActivity(), this).execute(tag, estado);
     }
 
     private class UpdateElement extends AsyncTask<String, Void, String> {
@@ -91,7 +92,7 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         private static final String user = "root";
         private static final String pass = "";
 
-        public UpdateElement(View view, Context contexto, ListaFragment fragment){
+        public UpdateElement(View view, Context contexto, ListaFragment fragment) {
             this.view = view;
             this.contexto = contexto;
             this.fragment = fragment;
@@ -117,8 +118,19 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
                 String estado = params[1];
 
                 Statement st = con.createStatement();
-                Log.e(TAG,"update Elemento set estado = "+ estado +" where nombre = '" +nombre+"' and  nombreLista = '"+listaNombre+"';");
-                st.execute("update Elemento set estado = "+ estado +" where nombre = '" +nombre+"' and  nombreLista = '"+listaNombre+"';");
+                Log.e(TAG, "update Elemento set estado = " + estado + " where nombre = '" + nombre + "' and  nombreLista = '" + listaNombre + "';");
+                st.execute("update Elemento set estado = " + estado + " where nombre = '" + nombre + "' and  nombreLista = '" + listaNombre + "';");
+
+                //Se actualiza en la bd local
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(CarroCompraContract.ColumnElemento.STATUS, Integer.parseInt(estado));
+
+                String where = CarroCompraContract.ColumnElemento.ID + " = ? and " + CarroCompraContract.ColumnElemento.IDLISTA + " = ?";
+                String[] args = {nombre, listaNombre};
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + nombre);
+                getActivity().getContentResolver().update(uri, values, where, args);
+
                 String result = getResources().getString(R.string.data_charged);
 
                 res = result;
@@ -150,7 +162,7 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         ArrayList<Double> precios;
         ArrayList<Integer> cantidad;
 
-        public ConnectMySql(View view, Context contexto, ListaFragment fragment){
+        public ConnectMySql(View view, Context contexto, ListaFragment fragment) {
             this.view = view;
             this.contexto = contexto;
             this.fragment = fragment;
@@ -168,7 +180,7 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         protected String doInBackground(String... params) {
             try {
 
-                String where = CarroCompraContract.ColumnElemento.REMOVED +" = 0";
+                String where = CarroCompraContract.ColumnElemento.REMOVED + " = 0";
                 Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
                 Cursor c = getActivity().getContentResolver().query(uri, null, where, null, null);
 
@@ -178,7 +190,7 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
                 precios = new ArrayList<>();
                 cantidad = new ArrayList<>();
 
-                while(c.moveToNext()){
+                while (c.moveToNext()) {
                     productos.add(c.getString(0));
                     estados.add(c.getInt(4));
                     precios.add(c.getDouble(2));

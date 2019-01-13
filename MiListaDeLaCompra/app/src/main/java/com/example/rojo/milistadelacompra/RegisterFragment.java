@@ -29,7 +29,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private EditText newSurname2;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         boton = view.findViewById(R.id.register_button);
         boton.setOnClickListener(this);
@@ -60,7 +60,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         private static final String user = "root";
         private static final String pass = "";
 
-        public ConnectMySql(View view, Context contexto){
+        public ConnectMySql(View view, Context contexto) {
             this.view = view;
             this.contexto = contexto;
         }
@@ -76,7 +76,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         @Override
         protected String doInBackground(String... params) {
             String res;
-            Log.d(TAG, "Trying to insert "+ params[0]+" "+params[1]+" "+params[2]+" "+params[3]+" "+params[4]);
+            Log.d(TAG, "Trying to insert " + params[0] + " " + params[1] + " " + params[2] + " " + params[3] + " " + params[4]);
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, user, pass);
@@ -87,10 +87,35 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 String userName = params[2];
                 String userSurname1 = params[3];
                 String userSurname2 = params[4];
-                Statement st = con.createStatement();
-                Log.e(TAG, "insert into Usuario values ('"+userNickName+"', '"+ userPass+ "', '"+ userName+"', '"+ userSurname1+"', '"+ userSurname2+"');");
-                st.execute("insert into Usuario values ('"+userNickName+"', '"+ userPass+ "', '"+ userName+"', '"+ userSurname1+"', '"+ userSurname2+"');");
-                String result = getResources().getString(R.string.data_charged);
+
+                String result = "";
+
+                if (!userNickName.equals("")) {
+                    if (!userPass.equals("")) {
+                        if (!userName.equals("")) {
+                            if (!userSurname1.equals("") && !userSurname2.equals("")) {
+                                userNickName = userNickName.trim();
+                                userName = userName.trim();
+                                userSurname1 = userSurname1.trim();
+                                userSurname2 = userSurname2.trim();
+
+                                Statement st = con.createStatement();
+                                Log.e(TAG, "insert into Usuario values ('" + userNickName + "', '" + userPass + "', '" + userName + "', '" + userSurname1 + "', '" + userSurname2 + "');");
+                                st.execute("insert into Usuario values ('" + userNickName + "', '" + userPass + "', '" + userName + "', '" + userSurname1 + "', '" + userSurname2 + "');");
+                                result = getResources().getString(R.string.data_charged);
+                            } else {
+                                result = getResources().getString(R.string.insert_user_surname);
+                            }
+                        } else {
+                            result = getResources().getString(R.string.insert_user_name);
+                        }
+                    } else {
+                        result = getResources().getString(R.string.insert_user_pass);
+                    }
+
+                } else {
+                    result = getResources().getString(R.string.insert_user_nick);
+                }
                 res = result;
 
             } catch (Exception e) {

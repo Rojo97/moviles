@@ -15,7 +15,7 @@ public class ListaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista);
         // Comprobar si la actividad ya ha sido creada con anterioridad
         if (savedInstanceState == null) {
-        // Crear un fragment
+            // Crear un fragment
             ListaFragment fragment = new ListaFragment();
             fragment.setArguments(this.getIntent().getExtras());
             getFragmentManager()
@@ -27,8 +27,7 @@ public class ListaActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRestart()
-    {
+    public void onRestart() {
         super.onRestart();
         finish();
         startActivity(getIntent());
