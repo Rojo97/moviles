@@ -53,6 +53,7 @@ public class CarroCompraContract {
         public static final String PRICE = "precioUnidad";
         public static final String IDLISTA = "nombreLista";
         public static final String STATUS = "estado";
+        public static final String REMOVED = "eliminado";
     }
 
 }

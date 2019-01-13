@@ -208,6 +208,7 @@ public class RefreshService extends IntentService {
                 int cantidad = rs.getInt("cantidad");
                 float precioUnidad = rs.getFloat("precioUnidad");
                 int estado = rs.getInt("estado");
+                int eliminado = rs.getInt("eliminado");
 
 
 
@@ -217,6 +218,7 @@ public class RefreshService extends IntentService {
                 values.put(CarroCompraContract.ColumnElemento.PRICE, precioUnidad);
                 values.put(CarroCompraContract.ColumnElemento.IDLISTA, idLista);
                 values.put(CarroCompraContract.ColumnElemento.STATUS, estado);
+                values.put(CarroCompraContract.ColumnElemento.REMOVED, eliminado);
                 db.insertWithOnConflict(CarroCompraContract.TABLEELEMENTO, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
             }

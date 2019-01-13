@@ -92,8 +92,8 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
                 String user = preferencias.getString("user", "");
 
                 Statement st = con.createStatement();
-                Log.e(TAG, "insert into Elemento values ('"+name+"', "+ cantidad + ", "+prize+", '"+lista+"', "+0+");");
-                st.execute("insert into Elemento values ('"+name+"', "+ cantidad + ", "+prize+", '"+lista+"', "+0+");");
+                Log.e(TAG, "insert into Elemento values ('"+name+"', "+ cantidad + ", "+prize+", '"+lista+"', "+0+", "+0+");");
+                st.execute("insert into Elemento values ('"+name+"', "+ cantidad + ", "+prize+", '"+lista+"', "+0+", "+0+");");
 
                 //Guardo el elemento en la bd local
                 ContentValues values = new ContentValues();
@@ -103,6 +103,7 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
                 values.put(CarroCompraContract.ColumnElemento.PRICE, prize);
                 values.put(CarroCompraContract.ColumnElemento.IDLISTA, lista);
                 values.put(CarroCompraContract.ColumnElemento.STATUS, 0);
+                values.put(CarroCompraContract.ColumnElemento.REMOVED, 0);
                 Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + lista + "/Elementos");
                 getActivity().getContentResolver().insert(uri, values);
 
@@ -111,7 +112,7 @@ public class CreateItemFragment extends Fragment implements View.OnClickListener
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                Log.e(TAG, e.toString());
+                Log.e(TAG, e.toString() + " Db " + e.getMessage() +" - " +e.getStackTrace());
                 res = getResources().getString(R.string.db_duplicate_element);
             } catch (Exception e) {
                 e.printStackTrace();
