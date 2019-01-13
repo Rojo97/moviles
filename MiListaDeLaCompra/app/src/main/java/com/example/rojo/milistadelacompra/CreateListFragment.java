@@ -1,9 +1,11 @@
 package com.example.rojo.milistadelacompra;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -78,8 +80,6 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
                 Connection con = DriverManager.getConnection(url, user, pass);
                 System.out.println("Database conection success");
 
-                db = dbHelper.getWritableDatabase();
-
                 String listName = params[0];
                 SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(contexto);
                 String user = preferencias.getString("user", "");
@@ -89,11 +89,20 @@ public class CreateListFragment extends Fragment implements View.OnClickListener
                 st.executeUpdate("insert into ListaCompra values ('"+listName+"', '"+ user + "', "+1+");");
                 st.executeUpdate("INSERT INTO Participacion (nickUsuario, nombreLista) VALUES ('"+user+"', '"+listName+"');");
 
-                //Se añade la lista en la bd local
-                String sql = String.format("insert into %s (%s, %s, %s) values ('%s', '%s', %d)", CarroCompraContract.TABLELISTACOMPRA,
-                        CarroCompraContract.ColumnListaCompra.ID, CarroCompraContract.ColumnListaCompra.USER, CarroCompraContract.ColumnListaCompra.STATUS,
-                        listName, user, 1);
-                db.execSQL(sql);
+
+                //Guardo los datos en la bd local
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(CarroCompraContract.ColumnListaCompra.ID, listName);
+                values.put(CarroCompraContract.ColumnListaCompra.USER, user);
+                values.put(CarroCompraContract.ColumnListaCompra.STATUS, 1);
+                getActivity().getContentResolver().insert(CarroCompraContract.CONTENT_URI_LISTA, values);
+
+                values.clear();
+                values.put(CarroCompraContract.ColumnParticipacion.USER, user);
+                values.put(CarroCompraContract.ColumnParticipacion.LISTA, listName);
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listName + "/Participantes");
+                getActivity().getContentResolver().insert(uri, values);
 
                 String result = getResources().getString(R.string.data_saved);
                 res = result;

@@ -26,6 +26,7 @@ public class CarroCompraProvider extends ContentProvider {
         sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*", CarroCompraContract.STATUS_ITEM_LISTA);
         sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLEPARTICIPACION, CarroCompraContract.STATUS_DIR_PARTICIPACION);
 
+        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Participantes", CarroCompraContract.STATUS_DIR_PARTICIPACION_LISTA);
         //En la ruta de la Uri el primer * se refiere al nombre de la ListaCompra y el segundo * al nombre del Usuario
         sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Participantes/*", CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA);
         sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLEELEMENTO, CarroCompraContract.STATUS_DIR_ELEMENTO);
@@ -144,17 +145,27 @@ public class CarroCompraProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         Uri ret = null;
-        // Nos aseguramos de que la URI es correcta
-        if (sURIMatcher.match(uri) != CarroCompraContract.STATUS_DIR_LISTA) {
-            throw new IllegalArgumentException("uri incorrecta: " + uri);
+        String table;
+
+        switch (sURIMatcher.match(uri)){
+            case CarroCompraContract.STATUS_DIR_LISTA:
+                table = CarroCompraContract.TABLELISTACOMPRA;
+                break;
+            case CarroCompraContract.STATUS_DIR_PARTICIPACION_LISTA:
+                table = CarroCompraContract.TABLEPARTICIPACION;
+                break;
+            case CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA:
+                table = CarroCompraContract.TABLEELEMENTO;
+                break;
+            default:
+                throw new IllegalArgumentException("uri incorrecta: " + uri);
         }
+
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long rowId = db.insertWithOnConflict(CarroCompraContract.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+        long rowId = db.insertWithOnConflict(table, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+        Log.d(TAG, " Db LLEGAAAA "+ rowId);
         // ¿Se insertó correctamente?
         if (rowId != -1) {
-            long id = contentValues.getAsLong(CarroCompraContract.ColumnListaCompra.ID);
-            ret = ContentUris.withAppendedId(uri, id);
-            Log.d(TAG, "uri insertada: " + ret);
             // Notificar que los datos para la URI han cambiado
             getContext().getContentResolver().notifyChange(uri, null);
         }
