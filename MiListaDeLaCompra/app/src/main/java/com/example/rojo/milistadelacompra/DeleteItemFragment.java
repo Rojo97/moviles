@@ -151,8 +151,8 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
                 String itemName = params[0];
 
                 Statement st = con.createStatement();
-                Log.e(TAG, "update Elemento set estado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
-                st.execute("update Elemento set estado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
+                Log.e(TAG, "update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
+                st.execute("update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
                 String result = getResources().getString(R.string.data_saved);
                 res = result;
 
