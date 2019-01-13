@@ -30,6 +30,13 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
     private EditText newQuantity;
     private EditText newPrize;
 
+    /**
+     * Inicializa el fragment y manda obtener los candidatos a editar
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_item, container, false);
@@ -47,7 +54,10 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
+    /**
+     * Al hacer click en el boton se ordena guardar los valores
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         ConnectMySql conexion = new ConnectMySql(this.getView(), this.getActivity());
@@ -58,6 +68,10 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
         new ConnectMySql(this.getView(), this.getActivity()).execute(nameItem, quantity, prize);
     }
 
+    /**
+     * Cuando se han obtenido los acndidatos a editar se añaden al spinner
+     * @param items
+     */
     public void onTaskFinished(ArrayList<String> items) {
         if (items != null) {
             String[] nombreItems = new String[items.size()];
@@ -84,6 +98,11 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
             super.onPreExecute();
         }
 
+        /**
+         * Obtinene los items que se pueden editar
+         * @param params
+         * @return String indicando como ha ido el proceso
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -136,6 +155,11 @@ public class EditItemFragment extends Fragment implements View.OnClickListener {
 
         }
 
+        /**
+         * Modifica el elemento en la base de datos local y remota
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;

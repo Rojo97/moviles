@@ -25,6 +25,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
+    /**
+     * Inicializa el fragment y pide las listas
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -38,6 +45,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     * Al seleccionar una lista nos lleva a la vista de sus items
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         int i = view.getId();
@@ -49,6 +60,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         startActivity(intentLista);
     }
 
+    /**
+     * Cuando tenemos los datos se crea un boton por lista
+     * @param listas
+     */
     public void onTaskFinished(ArrayList<String> listas) {
         LinearLayout layout = this.getView().findViewById(R.id.my_lists_buttons);
 
@@ -87,6 +102,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             super.onPreExecute();
         }
 
+        /**
+         * Pide las listas del usuario
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             try {

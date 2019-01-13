@@ -11,12 +11,19 @@ public class SettingsFragment extends PreferenceFragment {
 
     private SharedPreferences prefs;
 
+    /**
+     * Inicializa el fragment
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
     }
 
+    /**
+     * Llamado cuando el usuario puede ver el fragment
+     */
     @Override
     public void onStart() {
         super.onStart();

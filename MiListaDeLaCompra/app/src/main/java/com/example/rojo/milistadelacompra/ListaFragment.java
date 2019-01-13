@@ -29,6 +29,13 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
     private TextView nombreTextview;
     private String listaNombre;
 
+    /**
+     * Inicializa la vista de la lista y pide sus elementos
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista, container, false);
@@ -44,6 +51,13 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Cuando se tienen los elementos se crea un checkbox por cada uno de ellos
+     * @param productos
+     * @param estados
+     * @param precios
+     * @param cantidades
+     */
     public void onTaskFinished(ArrayList<String> productos, ArrayList<Integer> estados, ArrayList<Double> precios, ArrayList<Integer> cantidades) {
         LinearLayout layout = this.getView().findViewById(R.id.my_products);
 
@@ -66,6 +80,10 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Al pulsar un checkbox se ordena actualizar su dato en la base de datos
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         boolean checked = ((CheckBox) view).isChecked();
@@ -102,6 +120,11 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
 
         }
 
+        /**
+         * Se cambia el estado de un elemento en local y remoto
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             String res;
@@ -169,6 +192,11 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
             super.onPreExecute();
         }
 
+        /**
+         * Obtiene los elementos de una lista
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(String... params) {
             try {
