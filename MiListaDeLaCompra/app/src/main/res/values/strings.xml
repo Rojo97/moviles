@@ -48,4 +48,5 @@
     <string name="recover_item_title_text">Recuperar elemento</string>
     <string name="recover_item_button_text">Recuperar</string>
     <string name="recover_item">Recuperar elemento</string>
+    <string name="recover_list">Recuperar lista</string>
 </resources>

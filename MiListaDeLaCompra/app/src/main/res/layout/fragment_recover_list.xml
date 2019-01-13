@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10pt"
+    android:orientation="vertical"
+    tools:context="com.example.rojo.milistadelacompra.RecoverListActivity">
+
+    <TextView
+        android:id="@+id/text_recover_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recover_list"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/recover_list_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_list_name" />
+
+    <Spinner
+        android:id="@+id/select_listas_recover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"/>
+
+    <Button
+        android:id="@+id/recover_list_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recover_item_button_text" />
+
+</LinearLayout>

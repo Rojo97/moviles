@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.delete_list:
                 startActivity(new Intent(this, DeleteListActivity.class));
                 return true;
+            case R.id.recover_list:
+                startActivity(new Intent(this, RecoverListActivity.class));
+                return true;
             case R.id.register:
                 startActivity(new Intent(this, RegisterActivity.class));
                 return true;
