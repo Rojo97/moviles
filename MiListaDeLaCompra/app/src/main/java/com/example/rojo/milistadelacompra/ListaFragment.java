@@ -45,7 +45,7 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public void onTaskFinished(ArrayList<String> productos){
+    public void onTaskFinished(ArrayList<String> productos, ArrayList<Integer> estados, ArrayList<Double> precios, ArrayList<Integer> cantidades){
         LinearLayout layout = this.getView().findViewById(R.id.my_products);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -55,8 +55,9 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
             for (int i = 0; i < productos.size(); i++) {
                 CheckBox item = new CheckBox(this.getActivity());
                 item.setLayoutParams(layoutParams);
-                item.setText(productos.get(i));
+                item.setText(cantidades.get(i)+" "+productos.get(i)+" ("+ precios.get(i)+"€)");
                 item.setTag(productos.get(i));
+                item.setChecked(estados.get(i)==1);
                 item.setOnClickListener(this);
                 item.setTextSize(25);
                 layout.addView(item);
@@ -134,7 +135,6 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
             Log.e(TAG, result);
             Toast.makeText(contexto, result, Toast.LENGTH_SHORT)
                     .show();
-            fragment.onTaskFinished(productos);
         }
     }
 
@@ -146,6 +146,9 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
         View view;
         ListaFragment fragment;
         ArrayList<String> productos;
+        ArrayList<Integer> estados;
+        ArrayList<Double> precios;
+        ArrayList<Integer> cantidad;
 
         public ConnectMySql(View view, Context contexto, ListaFragment fragment){
             this.view = view;
@@ -171,9 +174,15 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
 
                 String result = getResources().getString(R.string.data_charged);
                 productos = new ArrayList<>();
+                estados = new ArrayList<>();
+                precios = new ArrayList<>();
+                cantidad = new ArrayList<>();
 
                 while(c.moveToNext()){
                     productos.add(c.getString(0));
+                    estados.add(c.getInt(4));
+                    precios.add(c.getDouble(2));
+                    cantidad.add(c.getInt(1));
                 }
 
                 res = result;
@@ -191,7 +200,7 @@ public class ListaFragment extends Fragment implements View.OnClickListener {
             Log.e(TAG, result);
             Toast.makeText(contexto, result, Toast.LENGTH_SHORT)
                     .show();
-            fragment.onTaskFinished(productos);
+            fragment.onTaskFinished(productos, estados, precios, cantidad);
         }
     }
 
