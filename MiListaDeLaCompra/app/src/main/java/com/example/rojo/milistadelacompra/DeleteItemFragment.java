@@ -1,8 +1,11 @@
 package com.example.rojo.milistadelacompra;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -87,17 +90,15 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
         protected String doInBackground(String... params) {
             String res;
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection(url, user, pass);
-                System.out.println("Database conection success");
 
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("select * from Elemento where nombreLista = '"+listaNombre+"';");
-                ResultSetMetaData rsmd = rs.getMetaData();
+                String where = CarroCompraContract.ColumnElemento.REMOVED +" = 0";
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos");
+                Cursor c = getActivity().getContentResolver().query(uri, null, where, null, null);
+
                 String result = getResources().getString(R.string.data_charged);
 
-                while (rs.next()) {
-                    nombreItems.add(rs.getString(1));
+                while (c.moveToNext()) {
+                    nombreItems.add(c.getString(0));
                 }
                 res = result;
             } catch (Exception e) {
@@ -153,6 +154,16 @@ public class DeleteItemFragment extends Fragment implements View.OnClickListener
                 Statement st = con.createStatement();
                 Log.e(TAG, "update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
                 st.execute("update Elemento set eliminado = 1 where nombre = '"+itemName+"' and nombreLista = '"+listaNombre+"';");
+
+                ContentValues values = new ContentValues();
+                values.clear();
+                values.put(CarroCompraContract.ColumnElemento.REMOVED, 1);
+
+                String where = CarroCompraContract.ColumnElemento.ID + " = ? and " + CarroCompraContract.ColumnElemento.IDLISTA + " = ?";
+                String[] args = {itemName, listaNombre};
+                Uri uri = Uri.parse(CarroCompraContract.CONTENT_URI_LISTA + "/" + listaNombre + "/Elementos/" + itemName);
+                getActivity().getContentResolver().update(uri, values, where, args);
+
                 String result = getResources().getString(R.string.data_saved);
                 res = result;
 

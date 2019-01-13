@@ -31,7 +31,7 @@ public class CarroCompraProvider extends ContentProvider {
         sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Participantes/*", CarroCompraContract.STATUS_ITEM_PARTICIPACION_LISTA);
         sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLEELEMENTO, CarroCompraContract.STATUS_DIR_ELEMENTO);
         sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Elementos", CarroCompraContract.STATUS_DIR_ELEMENTO_LISTA);
-        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Elementos/*", CarroCompraContract.STATUS_ITEM_ELEMENTO);
+        sURIMatcher.addURI(CarroCompraContract.AUTHORITY, CarroCompraContract.TABLELISTACOMPRA + "/*/Elementos/*", CarroCompraContract.STATUS_ITEM_ELEMENTO_LISTA);
     }
 
     @Override
@@ -198,24 +198,39 @@ public class CarroCompraProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] strings) {
         String where;
+        String table;
+        String id;
+        String nombreLista;
         switch (sURIMatcher.match(uri)) {
             case CarroCompraContract.STATUS_DIR_LISTA:
-                where = s;
+                where = selection;
+                table = CarroCompraContract.TABLELISTACOMPRA;
                 break;
             case CarroCompraContract.STATUS_ITEM_LISTA:
-                long id = ContentUris.parseId(uri);
+                id = uri.getLastPathSegment();
                 where = CarroCompraContract.ColumnListaCompra.ID
                         + "="
                         + id
-                        + (TextUtils.isEmpty(s) ? "" : " and ( " + s + " )");
+                        + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
+                table = CarroCompraContract.TABLELISTACOMPRA;
+                break;
+            case CarroCompraContract.STATUS_ITEM_ELEMENTO_LISTA:
+                nombreLista = uri.getPathSegments().get(1);
+
+                where = CarroCompraContract.ColumnElemento.IDLISTA
+                        + "= '"
+                        + nombreLista
+                        + "' "
+                        + (TextUtils.isEmpty(selection) ? "" : " and ( " + selection + " )");
+                table = CarroCompraContract.TABLEELEMENTO;
                 break;
             default:
                 throw new IllegalArgumentException("uri incorrecta: " + uri);
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int ret = db.update(CarroCompraContract.TABLE, contentValues, where, strings);
+        int ret = db.update(table, contentValues, where, strings);
         if (ret > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
